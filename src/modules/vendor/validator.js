@@ -6,10 +6,12 @@ import isEmail from 'validator/lib/isEmail';
 
 import en from 'src/locales/en.json';
 import ar from 'src/locales/ar.json';
+import fa from 'src/locales/fa.json';
 
 const languages = {
   en,
   ar,
+  fa,
 };
 
 export function validatorContact(data, language) {
