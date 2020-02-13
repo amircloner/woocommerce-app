@@ -27,10 +27,12 @@ const data = [
     title: {
       en: 'Shopping Smart',
       ar: 'التسوق الذكي',
+      fa: 'خرید هوشمند',
     },
     subtitle: {
       en: 'Welcome to OREO Store',
       ar: 'مرحبًا بكم في متجر OREO',
+      fa: 'به فروشگاه OREO خوش آمدید',
     },
   },
   {
@@ -38,10 +40,12 @@ const data = [
     title: {
       en: 'Focus UX',
       ar: 'التركيز UX',
+      fa: 'تمرکز UX',
     },
     subtitle: {
       en: 'Personalization of User Experience',
       ar: 'إضفاء الطابع الشخصي على تجربة المستخدم',
+      fa: 'شخصی سازی تجربه کاربر',
     },
   },
   {
@@ -49,10 +53,12 @@ const data = [
     title: {
       en: 'Creative Concept',
       ar: 'مفهوم الإبداعي',
+      fa: 'مفهوم خلاق',
     },
     subtitle: {
       en: 'Discovering new horizons',
       ar: 'اكتشاف آفاق جديدة',
+      fa: 'کشف افق های جدید',
     },
   },
 ];
