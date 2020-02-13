@@ -44,7 +44,7 @@
       "text_apply": "Apply",
       "text_submit": "Submit",
       "text_search": "جستجو کردن",
-      "text_select": "Select",
+      "text_select": "انتخاب",
       "text_add_cart": "افزودن به سبد خرید",
       "text_view_cart": "مشاهده سبد خرید",
       "text_choose_item": "Choose item",
@@ -110,7 +110,7 @@
       "text_description": "توضیحات",
       "text_information": "Additional information",
       "text_reviews": "Reviews",
-      "text_title_like": "You may so like",
+      "text_title_like": "ممکن است دوست داشته باشید",
       "text_stock": "موجود است",
       "text_in_stock": "{{count}} in stock",
       "text_stock_out": "موجود نیست",
@@ -148,11 +148,11 @@
   
       "text_store_featured": "Featured",
       "text_store_visit": "visit store",
-      "text_store_detail_product": "Products",
+      "text_store_detail_product": "محصولات",
       "text_store_detail_about": "در باره",
       "text_store_detail_review": "Reviews",
       "text_store_detail_contact": "مخاطب",
-      "text_store_detail_time": "Store time",
+      "text_store_detail_time": "ساعات کاری فروشگاه",
   
       "text_title_contact_store": "Contact Vendor",
       "text_button_contact_store": "ارسال پیام"
@@ -180,7 +180,7 @@
       "text_payment_discount": "Discount {{cost}}",
       "text_payment_tax": "Tax {{cost}}",
       "text_payment_privacy": "Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <b>privacy policy</b>.",
-      "text_congrats": "Congrats !",
+      "text_congrats": "تبریک !",
       "text_congrats_description": "با تشکر از خرید شما",
       "text_shopping": "ادامه خرید"
     },
@@ -222,8 +222,8 @@
       "text_password_description": "رمز عبور جدید شما باید حداقل 6 کاراکتر داشته باشد",
       "text_button_password": "گذرواژه جدید را ذخیره نمایید",
   
-      "text_input_first_name": "First Name *",
-      "text_input_last_name": "Last Name *",
+      "text_input_first_name": "نام *",
+      "text_input_last_name": "نام خانوادگی  *",
       "text_input_country": "Country / Region *",
       "text_input_address_1": "Address line 1 *",
       "text_input_address_2": "Address line 2",
@@ -272,7 +272,7 @@
     "inputs": {
       "text_first_name": "نام",
       "text_last_name": "نام خانوادگی",
-      "text_company": "Company name (optional)",
+      "text_company": "نام شرکت (اختیاری)",
       "text_country": "کشور",
       "text_address": "آدرس خیابان",
       "text_address_2": "Apartment, suite, unit etc. (optional)",
