@@ -1,6 +1,6 @@
 export const DARK = 'dark';
 export const LIGHT = 'light';
-export const DEFAULT_LANGUAGE_CODE = 'en';
+export const DEFAULT_LANGUAGE_CODE = 'fa';
 export const DEFAULT_CURRENCY = 'USD';
 export const PRODUCT_VIEW_STYLE_1 = 'style1';
 export const PRODUCT_VIEW_STYLE_2 = 'style2';
