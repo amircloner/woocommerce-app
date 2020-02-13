@@ -7,6 +7,7 @@ import passwordValidator from 'password-validator';
 
 import en from 'src/locales/en.json';
 import ar from 'src/locales/ar.json';
+import fa from 'src/locales/fa.json';
 
 let schema = new passwordValidator();
 
@@ -24,6 +25,7 @@ schema
 const languages = {
   en,
   ar,
+  fa,
 };
 
 export function validatorSignIn(data, language) {
