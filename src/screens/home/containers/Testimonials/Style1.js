@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 });
 
 TestimonialItem1.defaultProps = {
-  language: 'en',
+  language: 'fa',
 };
 
 export default withTheme(TestimonialItem1);
