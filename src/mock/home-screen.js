@@ -13,21 +13,21 @@ export const home1 = [
     data: [
       {
         image: 'https://cdn.rnlab.io/uploads/2019/08/06022038/slideshow1%403x.jpg',
-        heading: { text: { en: '60% OFF', ar: '60 ٪ من' }, color: '#e60023' },
-        sub: { text: { en: 'New', ar: 'الجديد' }, color: '#000' },
-        title: { text: { en: 'Sweater', ar: 'سترة' }, color: '#000' },
+        heading: { text: { en: '60% OFF', ar: '60 ٪ من', fa: '60% تخفیف' }, color: '#e60023' },
+        sub: { text: { en: 'New', ar: 'الجديد', fa: 'جدید' }, color: '#000' },
+        title: { text: { en: 'Sweater', ar: 'سترة', fa: 'ژاکت' }, color: '#000' },
       },
       {
         image: 'https://cdn.rnlab.io/uploads/2019/08/06022045/slideshow3%403x.jpg',
-        heading: { text: { en: '60% OFF', ar: '60 ٪ من' }, color: '#e60023' },
-        sub: { text: { en: 'New', ar: 'الجديد' }, color: '#000' },
-        title: { text: { en: 'Sweater', ar: 'سترة' }, color: '#000' },
+        heading: { text: { en: '60% OFF', ar: '60 ٪ من', fa: '60% تخفیف' }, color: '#e60023' },
+        sub: { text: { en: 'New', ar: 'الجديد', fa: 'جدید' }, color: '#000' },
+        title: { text: { en: 'Sweater', ar: 'سترة', fa: 'ژاکت' }, color: '#000' },
       },
       {
         image: 'https://cdn.rnlab.io/uploads/2019/08/06022032/slideshow2%403x.jpg',
-        heading: { text: { en: '60% OFF', ar: '60 ٪ من' }, color: '#fbbd08' },
-        sub: { text: { en: 'New', ar: 'الجديد' }, color: '#f2711c' },
-        title: { text: { en: 'Clothing', ar: 'ملابس' }, color: '#f2711c' },
+        heading: { text: { en: '60% OFF', ar: '60 ٪ من', fa: '60% تخفیف' }, color: '#fbbd08' },
+        sub: { text: { en: 'New', ar: 'الجديد', fa: 'جدید' }, color: '#f2711c' },
+        title: { text: { en: 'Clothing', ar: 'ملابس', fa: 'تن پوش' }, color: '#f2711c' },
       },
     ],
   },
@@ -53,6 +53,7 @@ export const home1 = [
     title: {
       en: 'Categories',
       ar: 'الاقسام',
+      fa: 'دسته بندی ها',
     },
     showName: false,
   },
@@ -77,6 +78,7 @@ export const home1 = [
     title: {
       en: 'Categories',
       ar: 'الاقسام',
+      fa: 'دسته بندی ها',
     },
     showName: true,
   },
@@ -90,6 +92,7 @@ export const home1 = [
       text: {
         en: 'New Arivals',
         ar: 'القادمون الجدد',
+        fa: 'تازه رسیده ها',
       },
       enable: true,
     },
@@ -105,6 +108,7 @@ export const home1 = [
       text: {
         en: 'Best Seller',
         ar: 'الأكثر مبيعا',
+        fa: 'کتاب پرفروش',
       },
       enable: true,
     },
@@ -120,6 +124,7 @@ export const home1 = [
       text: {
         en: 'Best Seller',
         ar: 'الأكثر مبيعا',
+        fa: 'کتاب پرفروش',
       },
       enable: false,
     },
