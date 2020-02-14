@@ -92,7 +92,7 @@ export const home1 = [
       text: {
         en: 'New Arivals',
         ar: 'القادمون الجدد',
-        fa: 'تازه رسیده ها',
+        fa: 'محصولات جدید',
       },
       enable: true,
     },
@@ -108,7 +108,7 @@ export const home1 = [
       text: {
         en: 'Best Seller',
         ar: 'الأكثر مبيعا',
-        fa: 'کتاب پرفروش',
+        fa: 'محصولات پرفروش',
       },
       enable: true,
     },
@@ -124,7 +124,7 @@ export const home1 = [
       text: {
         en: 'Best Seller',
         ar: 'الأكثر مبيعا',
-        fa: 'کتاب پرفروش',
+        fa: 'محصولات پرفروش',
       },
       enable: false,
     },
