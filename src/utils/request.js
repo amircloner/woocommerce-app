@@ -6,7 +6,7 @@ import demoConfig from "./demo";
 
 const request = axios.create();
 
-const jwtRequiredList = ['rnlab-app-control', 'dokan'];
+const jwtRequiredList = ['generace-app-control', 'dokan'];
 
 request.interceptors.request.use(
   config => {

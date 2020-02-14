@@ -46,7 +46,7 @@ class DemoConfig extends React.Component {
         });
       }
       // Check install plugin rnlab
-      const rnlab = await request.get(`${url}/wp-json/rnlab-app-control/v1/settings`);
+      const rnlab = await request.get(`${url}/wp-json/generace-app-control/v1/settings`);
       if (!isObject(rnlab.data)) {
         showMessage({
           message: 'Web site not install mobile builder yet.',

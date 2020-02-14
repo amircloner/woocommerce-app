@@ -54,7 +54,7 @@ export const getProductReviews = product_id => request.get(`/wc/v3/products/revi
  *  Get rating product reviews
  * @returns {*}
  */
-export const getRatingProductReviews = product_id => request.get(`/rnlab-app-control/v1/rating-count?product_id=${product_id}`);
+export const getRatingProductReviews = product_id => request.get(`/generace-app-control/v1/rating-count?product_id=${product_id}`);
 
 /**
  *  Get rating product reviews

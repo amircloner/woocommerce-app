@@ -26,13 +26,13 @@ export const fetchShippingLocaltionMethod = id => request.get(`/wc/v3/shipping/z
  * @param cc: country code
  * @returns {*}
  */
-export const getContinentCode = cc => request.get(`/rnlab-app-control/v1/get-continent-code-for-country?cc=${cc}`);
+export const getContinentCode = cc => request.get(`/generace-app-control/v1/get-continent-code-for-country?cc=${cc}`);
 
 /**
  * Get Zones
  * @returns {*}
  */
-export const getZones = () => request.get(`/rnlab-app-control/v1/zones`);
+export const getZones = () => request.get(`/generace-app-control/v1/zones`);
 
 /**
  * Get Zones
