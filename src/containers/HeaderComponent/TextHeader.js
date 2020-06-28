@@ -14,14 +14,14 @@ const TextHeader = ({ title, subtitle, titleStyle, subtitleStyle, containerStyle
   }
   return (
     <View style={[styles.container, containerStyle && containerStyle]}>
-      <Text style={titleStyle && titleStyle} h4 medium>
+      <Text style={titleStyle && titleStyle} h4 medium numberOfLines={1}>
         {title}
       </Text>
-      {subtitle && (
+      {typeof subtitle === 'string' ? (
         <Text h6 colorThird style={subtitleStyle && subtitleStyle}>
           {subtitle}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 };

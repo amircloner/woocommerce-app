@@ -3,6 +3,7 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {withNavigation} from 'react-navigation';
+import unescape from 'lodash/unescape';
 import {fromJS, List, Map} from 'immutable';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {withTheme, Image, Text} from 'src/components';
@@ -20,7 +21,7 @@ import {white, black} from 'src/components/config/colors';
 
 const stockStatusList = ['instock', 'onbackorder'];
 
-const ItemWishlist = props => {
+const ItemWishlist = React.memo(props => {
   const {t} = useTranslation();
   const {item, theme, style, navigation, handleAddToCart, configs} = props;
   const {
@@ -70,26 +71,28 @@ const ItemWishlist = props => {
         <View style={[styles.right, styles.col]}>
           <View style={[styles.info, styles.row]}>
             <Text colorSecondary style={[styles.textName, styles.col]}>
-              {name}
+              {unescape(name)}
             </Text>
             <Price price_format={price_format} type={type} />
           </View>
-          {type !== SIMPLE || (
-            type === SIMPLE && stockStatusList.includes(stock_status) && purchasable && configs.get('toggleCheckout')
-          ) ? (
+          {type !== SIMPLE ||
+          (type === SIMPLE &&
+            stockStatusList.includes(stock_status) &&
+            purchasable &&
+            configs.get('toggleCheckout')) ? (
             <Button
               title={titleButton}
               buttonStyle={styles.button}
               titleStyle={styles.titleButton}
               size={'small'}
-              onPress={type === SIMPLE ? getAddToCart: goProductDetail}
+              onPress={type === SIMPLE ? getAddToCart : goProductDetail}
             />
           ) : null}
         </View>
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   row: {

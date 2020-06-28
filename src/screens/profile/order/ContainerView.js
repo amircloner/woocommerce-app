@@ -11,7 +11,7 @@ const ContainerView = ({ style, title, subTitle, children, theme, ...rest }) => 
   };
   return (
     <Container {...rest} style={[styleContainer, style && style]}>
-      {title && (
+      {typeof title === 'string' ? (
         <Text
           medium
           h4
@@ -21,8 +21,8 @@ const ContainerView = ({ style, title, subTitle, children, theme, ...rest }) => 
         >
           {title}
         </Text>
-      )}
-      {subTitle && (
+      ) : null}
+      {typeof subTitle === 'string' ? (
         <Text
           medium
           style={{
@@ -31,7 +31,7 @@ const ContainerView = ({ style, title, subTitle, children, theme, ...rest }) => 
         >
           {subTitle}
         </Text>
-      )}
+      ) : null}
       {children && children}
     </Container>
   );

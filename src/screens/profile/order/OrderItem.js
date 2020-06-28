@@ -29,7 +29,7 @@ const OrderItem = ({ data, navigation, style, ...rest }) => {
             <Text style={styles.textInfo} h6 colorThird>
               {t('profile:text_code_order', { code: data.number })}
               {'\n'}
-              {t('profile:text_time_order', { time: strDate(data.date_created_gmt) })}
+              {t('profile:text_time_order', { time: strDate(data.date_created) })}
               {'\n'}
               {t('profile:text_status_order')}
               <Text style={{ color: statusValue.color }} h6>

@@ -12,7 +12,7 @@ import {timeAgo} from 'src/utils/time';
 import {margin, padding} from 'src/components/config/spacing';
 import {changeColor, changeSize} from 'src/utils/text-html';
 
-const CommentItem = ({data, theme}) => {
+const CommentItem = ({data, theme, tz}) => {
   if (!data) {
     return null;
   }
@@ -39,7 +39,7 @@ const CommentItem = ({data, theme}) => {
           <Rating size={12} startingValue={data.rating} readonly />
         </Col>
         <Text colorThird style={styles.textCreateAt}>
-          {timeAgo(data.date_created)}
+          {timeAgo(data.date_created, tz)}
         </Text>
       </Row>
       <TextHtml value={data.review} style={merge(

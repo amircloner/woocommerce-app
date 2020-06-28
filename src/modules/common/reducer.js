@@ -3,6 +3,16 @@ import moment from 'moment';
 import * as Actions from './constants';
 import {REHYDRATE} from 'redux-persist/lib/constants';
 import apiConfig from 'src/config/api';
+import {DEFAULT_LANGUAGE_CODE} from './constants';
+import i18n from '../../config-i18n';
+import {I18nManager} from 'react-native';
+import RNRestart from 'react-native-restart';
+
+const siteConfig = {
+  timezone_string: 'Asia/Karachi',
+  date_format: 'F j, Y',
+  time_format: 'g:i a',
+};
 
 const initConfigs = {
   requireLogin: false,
@@ -24,7 +34,11 @@ const initConfigs = {
   copyright: '© 2020 RNLAB',
   toggleRatingProduct: true,
   toggleShortDescriptionProduct: true,
+  toggleReviewProduct: true,
   toggleAddButtonProduct: true,
+  policy: {},
+  term: {},
+  about: {},
 };
 
 export const initState = fromJS({
@@ -58,7 +72,8 @@ export const initState = fromJS({
     url: apiConfig.API_ENDPOINT,
     consumer_key: apiConfig.CONSUMER_KEY,
     consumer_secret: apiConfig.CONSUMER_SECRET
-  }
+  },
+  siteConfig
 });
 
 /**
@@ -82,6 +97,7 @@ function commonReducer(state = initState, action = {}) {
 
       return state
         .merge(fromJS(payload.settings))
+        .set('siteConfig', fromJS(payload.settings))
         .set('theme', state.get('theme'))
         .set('currency', isCurrencyValidate ? state.get('currency') : defaultCurrency)
         .set('defaultCurrency', defaultCurrency)
@@ -148,11 +164,24 @@ function commonReducer(state = initState, action = {}) {
 
     case REHYDRATE:
       const data = payload && payload.common ? payload.common : Map();
-      return initState.merge(data);
+      const prepareData  = initState.merge(data);
+      const language = prepareData.get('language') ? prepareData.get('language') : DEFAULT_LANGUAGE_CODE;
+      reloadApp(language);
+      return prepareData;
     case 'UPDATE_DEMO_CONFIG_SUCCESS':
       return initState.set('demo', fromJS(payload));
     default:
       return state;
+  }
+}
+
+function reloadApp(language) {
+  const isRTL = i18n.dir(language) === 'rtl';
+  I18nManager.forceRTL(isRTL);
+  // Reload
+  if (isRTL !== I18nManager.isRTL) {
+    RNRestart.Restart();
+    // Updates.reloadFromCache(); // For expo
   }
 }
 

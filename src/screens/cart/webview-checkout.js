@@ -8,6 +8,7 @@ import {TextHeader, IconHeader} from 'src/containers/HeaderComponent';
 import {cartStack} from 'src/config/navigator';
 import {connect} from 'react-redux';
 import queryString from 'query-string';
+import { URL } from 'react-native-url-polyfill';
 
 import {selectCartList} from 'src/modules/cart/selectors';
 import {
@@ -45,6 +46,9 @@ class WebviewCheckout extends Component {
     const {url, canGoForward, canGoBack} = request;
     const {navigation, theme, dispatch, currency} = this.props;
 
+    const parsed = queryString.parse(new URL(url).search);
+    console.log(parsed);
+
     if (url.includes('/order-received/')) {
       navigation.replace(cartStack.webview_thank_you, {uri: `${url}&mobile=1&theme=${theme}&currency=${currency}`});
     }
@@ -53,7 +57,12 @@ class WebviewCheckout extends Component {
       navigation.replace(cartStack.webview_payment, {uri: `${url}&mobile=1&theme=${theme}&currency=${currency}`});
     }
 
-    if (url.includes(`${API}/cart`)) {
+    // Cancel order
+    if (parsed.cancel_order) {
+      navigation.goBack();
+    }
+
+    if (!parsed.cancel_order && url.includes(`${API}/cart`)) {
       dispatch(clearCart());
       navigation.goBack();
     }

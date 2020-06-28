@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import unescape from 'lodash/unescape';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Image, Text } from 'src/components';
 
@@ -66,7 +67,7 @@ const CategoryItem = (props: Props) => {
       </View>
       {disableName && (
         <Text h6 medium style={styles.text}>
-          {item.name}
+          {unescape(item.name)}
         </Text>
       )}
     </TouchableOpacity>

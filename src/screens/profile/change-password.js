@@ -19,7 +19,7 @@ import {changeColor} from 'src/utils/text-html';
 
 class ChangePasswordScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
   constructor(props) {
     super(props);

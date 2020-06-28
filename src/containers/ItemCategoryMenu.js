@@ -2,8 +2,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ListItem, Icon } from 'src/components';
 import { padding } from 'src/components/config/spacing';
+import unescape from 'lodash/unescape';
 
 import { mainStack } from 'src/config/navigator';
+import {excludeCategory} from "../utils/category";
+import {exclude_categories_sidebar} from "../config/category";
 
 class ItemCategoryMenu extends React.Component {
   constructor(props) {
@@ -22,27 +25,31 @@ class ItemCategoryMenu extends React.Component {
   handleGoProducts = category => {
     const params = {
       id: category.id,
-      name: category.name,
+      name: unescape(category.name),
     };
     this.props.goProducts(mainStack.products, params);
   };
 
   render() {
-    const { category, subCategories } = this.props;
+    const { category } = this.props;
     const { isShowSub } = this.state;
     if (!category) {
       return null;
     }
+
+    const { categories } = category;
+    const data = excludeCategory(categories, exclude_categories_sidebar);
+
     return (
       <>
         <ListItem
-          title={category.name}
+          title={unescape(category.name)}
           titleProps={{
             medium: true,
           }}
           titleStyle={styles.textItem}
           rightElement={
-            subCategories.length > 0 && (
+            data.length > 0 && (
               <Icon
                 name={isShowSub ? 'minus' : 'plus'}
                 size={14}
@@ -57,12 +64,12 @@ class ItemCategoryMenu extends React.Component {
           small
           onPress={() => this.handleGoProducts(category)}
         />
-        {subCategories.length > 0 && isShowSub && (
+        {data.length > 0 && isShowSub && (
           <View style={styles.viewSubs}>
-            {subCategories.map(subC => (
+            {data.map(subC => (
               <ListItem
                 key={subC.id}
-                title={subC.name}
+                title={unescape(subC.name)}
                 titleProps={{
                   medium: true,
                 }}

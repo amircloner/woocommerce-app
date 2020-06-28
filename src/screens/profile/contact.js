@@ -5,7 +5,7 @@ import {Header, Icon, Text, ThemedView} from 'src/components';
 
 import {IconHeader} from 'src/containers/HeaderComponent';
 
-import {configsSelector} from 'src/modules/common/selectors';
+import {configsSelector, languageSelector} from 'src/modules/common/selectors';
 
 import {grey5} from 'src/components/config/colors';
 import {margin, padding, borderRadius} from 'src/components/config/spacing';
@@ -14,12 +14,13 @@ const {width} = Dimensions.get('window');
 
 class ContactScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
   render() {
     const {
       configs,
       screenProps: {theme, t},
+      language,
     } = this.props;
     return (
       <ThemedView isFullView colorSecondary>
@@ -69,7 +70,9 @@ class ContactScreen extends React.Component {
                     color={grey5}
                     containerStyle={styles.marginRight('small')}
                   />
-                  <Text>{configs.get('address')}</Text>
+                  <Text>
+                    {typeof configs.get('address') === 'string' ? configs.get('address') : configs.getIn(['address', language])}
+                  </Text>
                 </View>
               </View>
               <Image
@@ -121,8 +124,9 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    configs: configsSelector(state)
-  }
+    configs: configsSelector(state),
+    language: languageSelector(state),
+  };
 };
 
 export default connect(mapStateToProps)(ContactScreen)

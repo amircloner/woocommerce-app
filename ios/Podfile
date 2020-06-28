@@ -40,6 +40,8 @@ target 'rn_oreo' do
 
   pod 'FBSDKCoreKit', :modular_headers => true
 
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+
   target 'rn_oreoTests' do
     inherit! :search_paths
     # Pods for testing

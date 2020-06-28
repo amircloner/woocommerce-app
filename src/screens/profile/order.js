@@ -56,7 +56,7 @@ class DetailOrder extends React.Component {
     return (
       <ContainerView title={title}>
         <Text colorSecondary style={styleOrder.text}>
-          Order: {strDate(order.date_created_gmt)}
+          Order: {strDate(order.date_created)}
         </Text>
         <Text colorSecondary style={styleOrder.text}>
           Status: <Text style={[styleOrder.text, { color: status.color }]}>{status.text}</Text>

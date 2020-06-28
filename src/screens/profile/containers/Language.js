@@ -76,13 +76,13 @@ class Language extends Component<Props> {
               uri: selectLanguage.country_flag_url,
             }
           }
-          resizeMode="stretch"
+          resizeMode="contain"
           style={styles.image}
         />
         <Text h6 colorThird>
           {upperCase(
-            selectLanguage && selectLanguage.code
-              ? selectLanguage.code
+            selectLanguage && selectLanguage.language_code
+              ? selectLanguage.language_code
               : language,
           )}
         </Text>
@@ -108,15 +108,15 @@ class Language extends Component<Props> {
                     key={code}
                     type="underline"
                     small
-                    title={lang.translated_name}
+                    title={lang.translated_name || lang.native_name}
                     rightIcon={
-                      lang.code === language && {
+                      lang.language_code === language && {
                         name: 'check',
                         type: 'feather',
                       }
                     }
                     titleProps={
-                      lang.code !== language
+                      lang.language_code !== language
                         ? {
                           colorSecondary: true,
                         }

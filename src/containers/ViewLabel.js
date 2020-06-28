@@ -65,14 +65,14 @@ class ViewLabel extends React.Component {
               borderColor: colors.border,
             },
           ]}>
-          {label && (
+          {typeof label === 'string' ? (
             <Animated.Text style={labelStyle} numberOfLines={1}>
               {label}
             </Animated.Text>
-          )}
+          ) : null}
           {children}
         </View>
-        {error && (
+        {typeof error === 'string' ? (
           <Text
             style={[
               styles.textError,
@@ -82,7 +82,7 @@ class ViewLabel extends React.Component {
             ]}>
             {error}
           </Text>
-        )}
+        ) : null}
       </>
     );
   }

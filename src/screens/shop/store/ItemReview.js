@@ -6,11 +6,12 @@ import Rating from 'src/containers/Rating';
 import {timeAgo} from 'src/utils/time';
 import {margin, padding} from 'src/components/config/spacing';
 
-const ItemReview = ({data, style, theme}) => {
+const ItemReview = ({data, style, theme, tz}) => {
   if (!data) {
     return null;
   }
   const {author} = data;
+
   return (
     <View
       style={[
@@ -35,7 +36,7 @@ const ItemReview = ({data, style, theme}) => {
           <Rating startingValue={data.rating} readonly />
         </View>
         <Text style={styles.date} colorThird>
-          {timeAgo(data.date)}
+          {timeAgo(data.date, tz)}
         </Text>
       </View>
       <Text h5 medium style={styles.title}>

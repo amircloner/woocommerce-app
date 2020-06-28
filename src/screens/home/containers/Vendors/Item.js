@@ -4,6 +4,10 @@ import {ThemedView, Text, Avatar, Icon, withTheme} from 'src/components';
 import {margin, padding, borderRadius} from 'src/components/config/spacing';
 
 const Item = ({item, style, theme}) => {
+  const {rating} = item;
+  const {rating: aveRating} = rating;
+  const numRating = parseFloat(aveRating) ? parseFloat(aveRating) : 0;
+  const valueRating = numRating.toFixed(1);
   return (
     <ThemedView colorSecondary style={[styles.container, style && style]}>
       <Avatar
@@ -20,7 +24,7 @@ const Item = ({item, style, theme}) => {
       <Text h5 medium style={styles.name}>{item.store_name}</Text>
       <View style={styles.viewRating}>
         <Text h5 colorThird medium style={styles.textRating}>
-          {item.rating && item.rating.rating ? item.rating.rating : '0.00'}
+          {valueRating}
         </Text>
         <Icon
           name="star"

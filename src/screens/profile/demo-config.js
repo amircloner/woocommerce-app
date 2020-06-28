@@ -1,6 +1,5 @@
 import React from 'react';
 
-import request from 'axios';
 import isObject from 'lodash/isObject';
 import RNRestart from 'react-native-restart';
 import {connect} from 'react-redux';
@@ -37,24 +36,14 @@ class DemoConfig extends React.Component {
     const {url, consumer_key, consumer_secret} = this.state;
     try {
       // Check WP website
-      await request.get(url);
-      const wp = await request.get(`${url}/wp-json`);
-      if (!isObject(wp.data)) {
-        showMessage({
-          message: 'The app support only Wordpress website.',
-          type: 'danger',
-        });
-      }
+      await fetch(url);
+      const wp = await fetch(`${url}/wp-json`);
+
       // Check install plugin rnlab
-      const rnlab = await request.get(`${url}/wp-json/generace-app-control/v1/settings`);
-      if (!isObject(rnlab.data)) {
-        showMessage({
-          message: 'Web site not install mobile builder yet.',
-          type: 'danger',
-        });
-      }
+      const rnlab = await fetch(`${url}/wp-json/rnlab-app-control/v1/settings`);
+
       // Check Woocommerce
-      const woo = await request.get(`${url}/wp-json/wc/v3/products?consumer_key=${consumer_key}&consumer_secret=${consumer_secret}`);
+      const woo = await fetch(`${url}/wp-json/wc/v3/products?consumer_key=${consumer_key}&consumer_secret=${consumer_secret}`);
       this.setState({loading: false});
 
       dispatch({
@@ -138,17 +127,14 @@ class DemoConfig extends React.Component {
                 onPress={this.handleSave}
               />
 
-              {
-                demo.get('url') && demo.get('url') !== API && (
-                  <Button
-                    loading={loading}
-                    title="Disconnect Store"
-                    containerStyle={styles.button}
-                    onPress={this.logoutStore}
-                  />
-                )
-              }
-
+              {demo.get('url') && demo.get('url') !== API ? (
+                <Button
+                  loading={loading}
+                  title="Disconnect Store"
+                  containerStyle={styles.button}
+                  onPress={this.logoutStore}
+                />
+              ) : null}
             </Container>
           </ScrollView>
         </KeyboardAvoidingView>

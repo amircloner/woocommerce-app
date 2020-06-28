@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
-import fetch from 'src/utils/request';
+import fetch from 'src/utils/fetch';
 import debounce from 'lodash/debounce';
 
 import { SearchBar, ThemedView } from 'src/components';
@@ -19,7 +19,7 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class SearchScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props) {

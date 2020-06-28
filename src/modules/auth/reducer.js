@@ -1,9 +1,9 @@
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
-import {REHYDRATE} from 'redux-persist/lib/constants';
+import { REHYDRATE } from 'redux-persist/lib/constants';
 import * as Actions from './constants';
-import {notificationMessage} from 'src/utils/error';
-import {shippingAddressInit, errorInit as initError} from './config';
+import { notificationMessage } from 'src/utils/error';
+import { shippingAddressInit, errorInit as initError } from './config';
 
 const initState = fromJS({
   isLogin: false,
@@ -27,7 +27,13 @@ const initState = fromJS({
   pendingChangeEmail: false,
   pendingChangePassword: false,
   pendingForgotPassword: false,
-  pendingUpdateShippingAddress: false,
+  pendingUpdateCustomer: false,
+  files: {
+    data: [],
+    loading: true,
+    error: true,
+    refreshing: false,
+  },
 });
 
 export default function authReducer(state = initState, action = {}) {
@@ -116,24 +122,25 @@ export default function authReducer(state = initState, action = {}) {
     case Actions.GET_SHIPPING_ADDRESS_SUCCESS:
     case Actions.GET_SHIPPING_ADDRESS_ERROR:
       return state.set('shippingAddress', fromJS(action.payload));
-    case Actions.UPDATE_SHIPPING_ADDRESS:
-      return state
-        .set('pendingUpdateShippingAddress', true)
-        .set('updateShippingAddressError', fromJS(initError));
+    case Actions.UPDATE_CUSTOMER:
+      return state.set('pendingUpdateCustomer', true);
 
+    case Actions.UPDATE_CUSTOMER_SUCCESS:
+    case Actions.UPDATE_CUSTOMER_ERROR:
+      return state.set('pendingUpdateCustomer', false);
+    case Actions.UPDATE_USER_SUCCESS:
+      const userOld = state.get('user');
+      const user = {
+        ...userOld.toJS(),
+        ...action.payload,
+      };
+      return state.set('user', fromJS(user));
     case Actions.UPDATE_SHIPPING_ADDRESS_SUCCESS:
-      return state
-        .set('pendingUpdateShippingAddress', false)
-        .set('shippingAddress', fromJS(action.payload));
-    case Actions.UPDATE_SHIPPING_ADDRESS_ERROR:
-      const updateAddressError = notificationMessage(action.payload);
-      return state
-        .set('pendingUpdateShippingAddress', false)
-        .set('updateShippingAddressError', fromJS(updateAddressError));
+      return state.set('shippingAddress', fromJS(action.payload));
     case REHYDRATE:
       if (action.payload && action.payload.auth) {
         // Restore only user and isLogin state
-        const {auth} = action.payload;
+        const { auth } = action.payload;
         return initState.merge(
           fromJS({
             user: auth.get('user'),
@@ -148,6 +155,27 @@ export default function authReducer(state = initState, action = {}) {
       }
     case 'UPDATE_DEMO_CONFIG_SUCCESS':
       return initState;
+    case Actions.GET_LIST_FILE_DOWNLOAD:
+      return state.set('files', {
+        data: [],
+        loading: true,
+        error: true,
+        refreshing: false,
+      });
+    case Actions.GET_LIST_FILE_DOWNLOAD_SUCCESS:
+      return state.set('files', {
+        data: fromJS(action.payload),
+        loading: false,
+        error: false,
+        refreshing: false,
+      });
+    case Actions.GET_LIST_FILE_DOWNLOAD_ERROR:
+      return state.set('files', {
+        data: [],
+        loading: false,
+        error: false,
+        refreshing: false,
+      });
     default:
       return state;
   }

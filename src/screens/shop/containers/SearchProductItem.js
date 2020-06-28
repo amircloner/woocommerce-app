@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import unescape from 'lodash/unescape';
 import { StyleSheet } from 'react-native';
 import { ListItem, withTheme } from 'src/components';
 import Container from 'src/containers/Container';
@@ -28,7 +28,7 @@ const SearchProductItem = props => {
       {data.map(dataSearch => (
         <ListItem
           key={dataSearch.id}
-          title={dataSearch.name}
+          title={unescape(dataSearch.name)}
           type="underline"
           small
           leftIcon={{

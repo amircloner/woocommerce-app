@@ -29,6 +29,11 @@ export const configsSelector = createSelector(
   data => data.get('configs'),
 );
 
+export const getSiteConfig = createSelector(
+    rootCommon,
+    data => data.get('siteConfig'),
+);
+
 export const isGettingStartSelector = createSelector(
   rootCommon,
   data => data.get('isGettingStarted'),

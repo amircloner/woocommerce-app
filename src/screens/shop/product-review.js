@@ -15,6 +15,7 @@ import { dataReviewSelector } from 'src/modules/product/selectors';
 
 import { mainStack } from 'src/config/navigator';
 import { margin, padding } from 'src/components/config/spacing';
+import {getSiteConfig} from "../../modules/common/selectors";
 
 class ReviewScreen extends React.Component {
 
@@ -30,7 +31,7 @@ class ReviewScreen extends React.Component {
     const {
       navigation,
       screenProps: { t },
-      dataReview
+      dataReview, siteConfig
     } = this.props;
     const data = dataReview.get('data');
     const image = navigation.getParam('image', '');
@@ -50,7 +51,7 @@ class ReviewScreen extends React.Component {
               <ActivityIndicator/>
             </View>)
             : data.toJS().map(review => (
-              <CommentItem key={review.id} data={review} />
+              <CommentItem key={review.id} data={review} tz={siteConfig.get('timezone_string')} />
             ))}
         </ScrollView>
         <Container style={styles.footer}>
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     dataReview: dataReviewSelector(state),
+    siteConfig: getSiteConfig(state),
   };
 };
 export default connect(mapStateToProps)(ReviewScreen);

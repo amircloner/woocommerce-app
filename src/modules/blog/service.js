@@ -1,4 +1,4 @@
-import request from 'src/utils/request';
+import request from 'src/utils/fetch';
 import queryString from 'query-string';
 
 /**

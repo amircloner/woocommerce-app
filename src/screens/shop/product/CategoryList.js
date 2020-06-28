@@ -1,10 +1,11 @@
 import React from 'react';
+import unescape from 'lodash/unescape';
 import {StyleSheet, ScrollView, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'src/components';
 import {margin, padding, borderRadius} from 'src/components/config/spacing';
 
 const CategoryList = ({onPress, data, theme}) => {
-  if (data.length === 0 ) {
+  if (!data || data.length === 0) {
     return null;
   }
   return (
@@ -27,7 +28,7 @@ const CategoryList = ({onPress, data, theme}) => {
             ]}
           >
             <Text h6 style={[styles.textName, {color: theme.CategoryProductList.color}]}>
-              {value.name}
+              {unescape(value.name)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
 CategoryList.defaultProps = {
   onPress: () => {
   },
+  data: [],
 };
 
 export default withTheme(CategoryList);

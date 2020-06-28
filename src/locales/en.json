@@ -67,7 +67,9 @@
     "text_search_country_mobile" : "Type Here...",
     "text_add" : "Add",
     "text_save" : "Save",
-    "text_sales" : "Sales"
+    "text_sales" : "Sales",
+    "text_state" : "State/Country",
+    "text_downloads": "Downloads"
   },
   "auth": {
     "text_input_email_address": "Email Address or Username *",
@@ -244,6 +246,7 @@
     "text_contact": "Contact us",
     "text_privacy": "Privacy policies",
     "text_term": "Terms Condition",
+    "text_term_content": "Term content here",
     "text_about": "About us",
     "text_rate_app": "Rate This App",
 
@@ -297,6 +300,8 @@
     "text_subtitle_category": "Please contact with admin to add categories",
     "text_title_product": "No have any products",
     "text_subtitle_product": "Please come in other category or filter value",
+    "text_title_product_no_category": "No have any this category",
+    "text_subtitle_product_no_category": "Please come in other category or filter value",
     "text_title_product_detail": "Get product fail",
     "text_subtitle_product_detail": "Check id product",
     "text_title_wishlist": "Your Wishlist is empty",
@@ -304,7 +309,8 @@
     "text_title_cart": "Your Bag is empty",
     "text_subtitle_cart": "Items added to your bag will show up here",
     "text_title_order": "You have not order yet",
-    "text_subtitle_order": "Keep track of your orders and returns"
+    "text_subtitle_order": "Keep track of your orders and returns",
+    "text_title_download": "You have not file yet"
   },
   "validators" : {
     "text_email": "E-Mail does not appear to be valid!",
@@ -325,6 +331,8 @@
     "text_fill_value": "Fill information fail.",
     "text_create_user_success": "You created user success.",
     "text_forgot_password_success": "Check your email to reset password.",
-    "text_change_password_success": "Password updated."
+    "text_change_password_success": "Password updated.",
+    "text_download_success": "Download success",
+    "text_no_permission_write_file": "You do not have permission to save the file to your phone"
   }
 }

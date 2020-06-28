@@ -6,6 +6,7 @@ import MeScreen from 'src/screens/profile/me';
 import SettingScreen from 'src/screens/profile/setting';
 import HelpScreen from 'src/screens/profile/help';
 import PrivacyScreen from 'src/screens/profile/privacy';
+import TermScreen from 'src/screens/profile/term';
 import ContactScreen from 'src/screens/profile/contact';
 import AboutScreen from 'src/screens/profile/about';
 import AccountScreen from 'src/screens/profile/account';
@@ -19,6 +20,8 @@ import DemoConfig from 'src/screens/profile/demo-config';
 import Vendors from 'src/screens/profile/vendors';
 import ChatVendor from 'src/screens/profile/chat-vendor';
 import EditAccount from 'src/screens/profile/edit-account';
+import Downloads from 'src/screens/profile/downloads';
+import Page from 'src/screens/profile/Page';
 
 export default createStackNavigator(
   {
@@ -26,6 +29,7 @@ export default createStackNavigator(
     [profileStack.setting]: SettingScreen,
     [profileStack.help]: HelpScreen,
     [profileStack.privacy]: PrivacyScreen,
+    [profileStack.term]: TermScreen,
     [profileStack.contact]: ContactScreen,
     [profileStack.about]: AboutScreen,
     [profileStack.account]: AccountScreen,
@@ -39,10 +43,12 @@ export default createStackNavigator(
     [profileStack.vendors]: Vendors,
     [profileStack.chat_vendor]: ChatVendor,
     [profileStack.edit_account]: EditAccount,
+    [profileStack.downloads]: Downloads,
+    [profileStack.page]: Page,
   },
   {
     defaultNavigationOptions: {
-      header: null,
+      headerShown: false,
     },
   }
 );

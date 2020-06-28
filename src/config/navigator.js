@@ -67,6 +67,7 @@ export const profileStack = {
   setting: 'SettingScreen',
   help: 'HelpScreen',
   privacy: 'PrivacyScreen',
+  term: 'TermScreen',
   contact: 'ContactScreen',
   about: 'AboutScreen',
   account: 'AccountScreen',
@@ -80,6 +81,8 @@ export const profileStack = {
   vendors: 'VendorsScreen',
   chat_vendor: 'ChatVendorScreen',
   edit_account: 'EditAccountScreen',
+  downloads: 'DownloadsScreen',
+  page: 'PageScreen',
 };
 
 export const rootSwitch = {

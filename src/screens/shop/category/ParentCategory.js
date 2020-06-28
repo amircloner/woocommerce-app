@@ -1,5 +1,6 @@
 import React from 'react';
-import {StyleSheet, ScrollView, View, TouchableOpacity} from 'react-native';
+import unescape from 'lodash/unescape';
+import {StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {Text, ThemedView, withTheme} from 'src/components';
 import {margin} from 'src/components/config/spacing';
 
@@ -15,17 +16,17 @@ const ParentCategory = ({data, selectVisit, onChange, theme, width}) => {
               {
                 borderBottomColor: theme.colors.bgColorSecondary,
               },
-              item.id === selectVisit && {
+              selectVisit && item.id === selectVisit.id && {
                 backgroundColor: theme.colors.bgColorSecondary,
-                borderLeftColor: theme.colors.primary
-              }
+                borderLeftColor: theme.colors.primary,
+              },
             ]}
-            onPress={() => onChange(item.id)}
+            onPress={() => onChange(item)}
           >
             <Text
               style={styles.name}
-              medium={item.id === selectVisit}
-            >{item.name}</Text>
+              medium={selectVisit && item.id === selectVisit.id}
+            >{unescape(item.name)}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>

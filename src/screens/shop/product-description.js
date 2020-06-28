@@ -8,6 +8,7 @@ import Container from 'src/containers/Container';
 import {TextHeader, IconHeader} from 'src/containers/HeaderComponent';
 
 import fonts, {lineHeights} from 'src/components/config/fonts';
+import { ENABLE_WEBVIEW } from '../../config/product-description';
 
 class ProductDescription extends Component {
   render() {
@@ -26,14 +27,14 @@ class ProductDescription extends Component {
     };
     const description = navigation.getParam('description', '');
     const isIframe = description.includes('<iframe');
-    const html = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>${description}</body></html>`;
+    const html = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style type="text/css">img {max-width: 100%}</style></head><body>${description}</body></html>`;
     return (
       <ThemedView isFullView>
         <Header
           leftComponent={<IconHeader name="x" size={24}/>}
           centerComponent={<TextHeader title={t('common:text_product_description')}/>}
         />
-        {isIframe ? <WebView
+        {isIframe || ENABLE_WEBVIEW ? <WebView
           originWhitelist={['*']}
           source={{html}}
         /> : <ScrollView>

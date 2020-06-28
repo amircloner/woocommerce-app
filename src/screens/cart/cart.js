@@ -15,13 +15,25 @@ import CartItem from './containers/CartItem';
 import CartTotal from './containers/CartTotal';
 import Coupon from './containers/Coupon';
 
-import { mainStack, homeTabs, cartStack } from 'src/config/navigator';
+import {
+  mainStack,
+  homeTabs,
+  cartStack,
+  authStack,
+} from 'src/config/navigator';
 import { margin } from 'src/components/config/spacing';
 import { selectCartList, cartSizeSelector } from 'src/modules/cart/selectors';
 import { removeCart, changeQuantity } from 'src/modules/cart/actions';
-import { wishListSelector, currencySelector, defaultCurrencySelector, configsSelector } from 'src/modules/common/selectors';
+import {
+  wishListSelector,
+  currencySelector,
+  defaultCurrencySelector,
+  configsSelector,
+  getSiteConfig,
+} from 'src/modules/common/selectors';
 import { addWishList, removeWishList } from 'src/modules/common/actions';
 import { checkQuantity } from 'src/utils/product';
+import { isLoginSelector } from '../../modules/auth/selectors';
 
 class CartScreen extends React.Component {
   goToProduct = product => {
@@ -69,6 +81,8 @@ class CartScreen extends React.Component {
       currency,
       defaultCurrency,
       configs,
+      siteConfig,
+      isLogin
     } = this.props;
     if (line_items.size < 1) {
       return (
@@ -116,7 +130,14 @@ class CartScreen extends React.Component {
           </Container> : null}
         />
         <Container style={styles.footerScrollview}>
-          <Button title={t('cart:text_go_checkout')} onPress={() => navigation.navigate(webviewCheckout ? cartStack.webview_checkout : mainStack.checkout)}/>
+          <Button title={t('cart:text_go_checkout')} onPress={() => {
+            console.log(siteConfig.get('enable_guest_checkout'), isLogin);
+            if (siteConfig.get('enable_guest_checkout') === 'no' && !isLogin) {
+              navigation.navigate(authStack.login);
+            } else {
+              navigation.navigate(webviewCheckout ? cartStack.webview_checkout : mainStack.checkout)
+            }
+          }}/>
         </Container>
       </>
     );
@@ -168,6 +189,8 @@ const mapStateToProps = state => {
     currency: currencySelector(state),
     defaultCurrency: defaultCurrencySelector(state),
     configs: configsSelector(state),
+    siteConfig: getSiteConfig(state),
+    isLogin: isLoginSelector(state),
   };
 };
 

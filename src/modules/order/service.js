@@ -1,4 +1,4 @@
-import request from 'src/utils/request';
+import request from 'src/utils/fetch';
 
 /**
  * Create an order
@@ -28,7 +28,7 @@ export const deleteOrder = (id, data) => request.delete(`/wc/v3/orders/${id}`);
  * @param data
  * @returns {*}
  */
-export const paymentStripe = data => request.post(`/generace-app-control/v1/payment-stripe`, data);
+export const paymentStripe = data => request.post(`/rnlab-app-control/v1/payment-stripe`, data);
 
 /**
  * refund
@@ -42,4 +42,4 @@ export const refundOrder = (idOrder, amount) => request.post(`/wc/v3/orders/${id
  * @param data
  * @returns {Promise<AxiosResponse<T>>}
  */
-export const processPayment = (data) => request.post(`generace-app-control/v1/process_payment`, data);
+export const processPayment = (data) => request.post(`rnlab-app-control/v1/process_payment`, data);

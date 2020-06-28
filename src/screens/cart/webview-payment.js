@@ -7,8 +7,9 @@ import Button from 'src/containers/Button';
 import Container from 'src/containers/Container';
 import {homeTabs} from 'src/config/navigator';
 import {connect} from 'react-redux';
-import {clearCart} from 'src/modules/cart/actions';
 import {margin} from 'src/components/config/spacing';
+import queryString from 'query-string';
+import { URL } from 'react-native-url-polyfill';
 
 class WebviewPayment extends Component {
 
@@ -26,8 +27,16 @@ class WebviewPayment extends Component {
     navigation.navigate(homeTabs.shop);
   };
 
-  handleResponse = data => {
-    console.log(data);
+  handleResponse = (request) => {
+
+    const {url} = request;
+
+    const parsed = queryString.parse(new URL(url).search);
+
+    // Cancel order
+    if (parsed.cancel_order) {
+      navigation.goBack();
+    }
   };
 
   render() {

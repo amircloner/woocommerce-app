@@ -66,6 +66,8 @@ class ProductCategory extends React.Component {
 
   fetchData = (category_id = this.state.category_id, per_page = this.state.per_page) => {
 
+    const { language } = this.props;
+
     this.setState(
       {
         loading: true,
@@ -73,6 +75,8 @@ class ProductCategory extends React.Component {
       async () => {
         try {
           const query = {
+            lang: language,
+            status: 'publish',
             category: category_id,
             per_page,
           };
@@ -130,9 +134,7 @@ class ProductCategory extends React.Component {
                 onPress={() =>
                   navigation.navigate(mainStack.products, {
                     name: heading.text[language],
-                    filterBy: Map({
-                      category  : category_id,
-                    }),
+                    id: category_id,
                   })
                 }
                 subTitle={t('common:text_show_all')}

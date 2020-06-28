@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {fromJS} from 'immutable';
-
+import unescape from 'lodash/unescape';
 import {StyleSheet, View} from 'react-native';
 import {withTheme, Image, Text} from 'src/components';
 import {Row, Col} from 'src/containers/Gird';
@@ -70,7 +70,9 @@ class CartItem extends React.Component {
   render() {
     const {theme, item, goToProduct, style} = this.props;
     const {product, quantity, meta_data, variation} = item;
-
+    if (!product) {
+      return null;
+    }
     return (
       <Row
         style={[
@@ -88,7 +90,7 @@ class CartItem extends React.Component {
               medium
               onPress={() => goToProduct(product)}
               style={styles.title}>
-              {product ? product.name : ''}
+              {unescape(product.name)}
             </Text>
             <Row style={styles.viewAttribute}>
               {meta_data.map((item, index) => this.renderVariation(item, index))}

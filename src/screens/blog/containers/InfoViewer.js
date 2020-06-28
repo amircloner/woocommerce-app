@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import unescape from 'lodash/unescape';
 import { withTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { Icon, Text, ThemeConsumer } from 'src/components';
@@ -24,7 +24,7 @@ class InfoViewer extends React.Component {
     try {
       const { urlUser } = this.props;
       if (urlUser) {
-        const data = await axios.get(urlUser);
+        const data = await fetch(urlUser);
         if (data.data && data.data.name) {
           this.setState({
             user: data.data.name,
@@ -52,7 +52,7 @@ class InfoViewer extends React.Component {
           <View style={[styles.container, style && style]}>
             <Icon name="clipboard" size={12} color={theme.Text.third.color} containerStyle={styles.iconView} />
             <Text h6 colorThird>
-              {this.getCategory()} {t('blog:text_by')}
+              {unescape(this.getCategory())} {t('blog:text_by')}
               <Text h6> {user}</Text>
             </Text>
           </View>

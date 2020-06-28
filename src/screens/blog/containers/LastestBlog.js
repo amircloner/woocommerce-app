@@ -1,6 +1,7 @@
 import React from 'react';
 import {withNavigation} from 'react-navigation';
 import {useTranslation} from 'react-i18next';
+import unescape from 'lodash/unescape';
 import {
   StyleSheet,
   View,
@@ -66,7 +67,7 @@ const LastestBlog = ({navigation, data, theme}) => {
                   h4
                   style={styles.textName}
                 >
-                  {item.title.rendered}
+                  {unescape(item.title.rendered)}
                 </Text>
                 <Text h6 colorThird>
                   {timeAgo(item.date_gmt)}

@@ -15,7 +15,7 @@ import BlogColumn from './Gird';
 import BlogRow from './Row';
 
 import {getBlogs} from 'src/modules/blog/service';
-import {languageSelector} from 'src/modules/common/selectors';
+import {getSiteConfig, languageSelector} from 'src/modules/common/selectors';
 
 import {prepareBlogItem} from 'src/utils/blog';
 import {homeDrawer} from 'src/config/navigator';
@@ -145,7 +145,7 @@ class BlogList extends React.Component {
   };
 
   render() {
-    const {navigation, fields, layout, language, t} = this.props;
+    const {navigation, fields, layout, language, t, siteConfig} = this.props;
     const {data, loading} = this.state;
     if (!fields || typeof fields !== 'object' || Object.keys(fields).length < 1) {
       return null;
@@ -175,6 +175,7 @@ class BlogList extends React.Component {
             <ActivityIndicator />:
             typeShowblog[layout] === 'row' ?
               <BlogRow
+                tz={siteConfig.get('timezone_string')}
                 data={data}
                 boxed={fields.boxed}
                 width={widthImage}
@@ -195,6 +196,7 @@ class BlogList extends React.Component {
 
 const mapStateToProps = state => ({
   language: languageSelector(state),
+  siteConfig: getSiteConfig(state),
 });
 
 export default compose(

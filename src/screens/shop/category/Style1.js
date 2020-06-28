@@ -8,27 +8,29 @@ import EmptyCategory from './EmptyCategory';
 import {categorySelector} from 'src/modules/category/selectors';
 import {borderRadius, margin, padding} from 'src/components/config/spacing';
 import {grey6} from 'src/components/config/colors';
+import unescape from 'lodash/unescape';
+import {excludeCategory} from 'src/utils/category';
+import {exclude_categories} from 'src/config/category';
 
 const noImage = require('src/assets/images/imgCateDefault.png');
 
 const Style1 = ({category, goProducts}) => {
-  const {data} = category;
-  const listData = data.filter(c => c.parent === 0)
+  const data = excludeCategory(category.data, exclude_categories);
   return (
     <>
-      <Notification containerStyle={styles.notification}/>
-      {listData.length < 1 ? (
+      <Notification containerStyle={styles.notification} />
+      {data.length < 1 ? (
         <EmptyCategory />
-      ) :(
+      ) : (
         <Container style={styles.content}>
           <FlatList
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             keyExtractor={item => `${item.id}`}
-            data={listData}
+            data={data}
             renderItem={({item}) => (
               <ListItem
-                title={item.name}
+                title={unescape(item.name)}
                 titleProps={{
                   h4: true
                 }}

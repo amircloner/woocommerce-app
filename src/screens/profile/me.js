@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
-import { StyleSheet, ScrollView, View, Linking } from 'react-native';
-import { Header, ThemedView, Text } from 'src/components';
+import {StyleSheet, ScrollView, View, Linking} from 'react-native';
+import {Header, ThemedView, Text} from 'src/components';
 
 import HeaderMe from './containers/HeaderMe';
 import SettingMe from './containers/SettingMe';
 import InformationMe from './containers/InformationMe';
 import Container from 'src/containers/Container';
 import SocialIcon from 'src/containers/SocialIcon';
-import { TextHeader, CartIcon } from 'src/containers/HeaderComponent';
+import {TextHeader, CartIcon} from 'src/containers/HeaderComponent';
 
-import { authSelector } from 'src/modules/auth/selectors';
-import { wishListSelector, configsSelector } from 'src/modules/common/selectors';
+import {authSelector} from 'src/modules/auth/selectors';
+import {wishListSelector, configsSelector, languageSelector} from 'src/modules/common/selectors';
 
-import { grey5 } from 'src/components/config/colors';
-import { margin } from 'src/components/config/spacing';
+import {grey5} from 'src/components/config/colors';
+import {margin} from 'src/components/config/spacing';
 
 class MeScreen extends Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
   icon = name => {
     return {
@@ -34,22 +34,23 @@ class MeScreen extends Component {
   };
 
   goPageOther = (router) => {
-    this.props.navigation.navigate(router)
+    this.props.navigation.navigate(router);
   };
 
   render() {
     const {
       configs,
-      auth: { isLogin },
-      screenProps: { t },
+      auth: {isLogin},
+      screenProps: {t},
+      language,
     } = this.props;
 
     return (
       <ThemedView isFullView>
-        <Header centerComponent={<TextHeader title={t('common:text_me_screen')} />} rightComponent={<CartIcon />} />
+        <Header centerComponent={<TextHeader title={t('common:text_me_screen')}/>} rightComponent={<CartIcon/>}/>
         <ScrollView>
           <Container style={styles.viewContent}>
-            <HeaderMe />
+            <HeaderMe/>
             <InformationMe
               isLogin={isLogin}
               clickPage={this.goPageOther}
@@ -97,7 +98,11 @@ class MeScreen extends Component {
                 onPress={() => this.handleLinkUrl(configs.get('twitter'))}
               />
             </View>
-            <Text h6 colorThird>{configs.get('copyright')}</Text>
+            <Text h6 colorThird >
+              {typeof configs.get('copyright') === 'string'
+                ? configs.get('copyright')
+                : configs.getIn(['copyright', language])}
+            </Text>
           </Container>
         </ScrollView>
       </ThemedView>
@@ -130,6 +135,7 @@ const mapStateToProps = state => {
     auth: authSelector(state),
     wishList: wishListSelector(state),
     configs: configsSelector(state),
+    language: languageSelector(state),
   };
 };
 

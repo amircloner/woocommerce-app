@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'redux';
 import {fromJS, List, Map} from 'immutable';
 import {connect} from 'react-redux';
+import unescape from 'lodash/unescape';
 import {withNavigation} from 'react-navigation';
 import {withTranslation} from 'react-i18next';
 import {StyleSheet, View, ActivityIndicator, Linking} from 'react-native';
@@ -49,6 +50,7 @@ class ProductGrouped extends React.Component {
       }
       const query = {
         include: product.get('grouped_products').toJS(),
+        status: 'publish',
       };
       const dataCategory = await getProducts(query);
       const dataPrepare = fromJS(dataCategory);
@@ -200,7 +202,7 @@ class ProductGrouped extends React.Component {
                     style={styles.viewCenter}
                     colorSecondary
                     onPress={() => this.goProductDetail(p)}>
-                    {p.get('name')}
+                    {unescape(p.get('name'))}
                   </Text>
                   <View style={styles.viewRight}>
                     <Price

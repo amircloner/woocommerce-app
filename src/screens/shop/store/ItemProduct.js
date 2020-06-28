@@ -1,8 +1,10 @@
 import React from 'react';
+import {compose} from 'redux';
+import {connect} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import {withNavigation} from 'react-navigation';
-
+import unescape from 'lodash/unescape';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Text, Image, ThemeConsumer} from 'src/components';
 import WishListIcon from 'src/containers/WishListIcon';
@@ -13,8 +15,10 @@ import Rating from 'src/containers/Rating';
 import {margin, padding} from 'src/components/config/spacing';
 
 import {mainStack} from 'src/config/navigator';
+import {configsSelector} from 'src/modules/common/selectors';
 
-const ItemProduct = ({item, navigation}) => {
+const ItemProduct = React.memo( props => {
+  const {item, navigation, configs} = props;
   const {t} = useTranslation();
   if (!item) {
     return null;
@@ -59,7 +63,7 @@ const ItemProduct = ({item, navigation}) => {
           <View style={styles.content}>
             <View style={styles.viewName}>
               <Text h5 colorSecondary medium style={styles.name} numberOfLines={2}>
-                {name}
+                {unescape(name)}
               </Text>
               <View style={styles.viewWishList}>
                 <WishListIcon
@@ -77,7 +81,7 @@ const ItemProduct = ({item, navigation}) => {
               style={styles.price}
             />
             <View style={styles.viewFooter}>
-              <View style={styles.viewRating}>
+              {configs.get('toggleReviewProduct') ? <View style={styles.viewRating}>
                 <Rating
                   startingValue={parseFloat(average_rating)}
                   readonly
@@ -86,7 +90,7 @@ const ItemProduct = ({item, navigation}) => {
                 <Text medium style={styles.countRating}>
                   ({rating_count})
                 </Text>
-              </View>
+              </View> : <View style={styles.viewRating}/>}
               <Text
                 h6
                 style={[styles.stockStatus, {color: theme.colors[colorStock]}]}>
@@ -98,8 +102,8 @@ const ItemProduct = ({item, navigation}) => {
         </TouchableOpacity>
       )}
     </ThemeConsumer>
-  )
-};
+  );
+});
 
 const styles = StyleSheet.create({
   row: {
@@ -166,4 +170,13 @@ ItemProduct.defaultProps = {
   item: {},
 };
 
-export default withNavigation(ItemProduct);
+const mapStateToProps = state => {
+  return {
+    configs: configsSelector(state),
+  };
+};
+
+export default compose(
+  withNavigation,
+  connect(mapStateToProps),
+)(ItemProduct);

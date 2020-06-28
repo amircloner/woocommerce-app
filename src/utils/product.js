@@ -31,8 +31,8 @@ export function prepareProductItem(item, currency, defaultCurrency, days = 5) {
       ? item.get('sale_price')
       : item.getIn(['multi-currency-prices', currency, 'sale_price']);
   let priceFormat = {
-    regular_price: currencyFormatter(regular_price, currency),
-    sale_price: currencyFormatter(sale_price, currency),
+    regular_price: parseFloat(regular_price) && parseFloat(regular_price) > 0 ? currencyFormatter(regular_price, currency) : '',
+    sale_price: parseFloat(sale_price) && parseFloat(sale_price) > 0 ? currencyFormatter(sale_price, currency) : '',
     percent_sale: percentSaleProduct(item.get('regular_price'), item.get('sale_price')),
   };
 
@@ -40,7 +40,7 @@ export function prepareProductItem(item, currency, defaultCurrency, days = 5) {
     let price =
       currency === defaultCurrency ? item.get('price') : item.getIn(['from-multi-currency-prices', currency, 'price']);
     priceFormat = {
-      regular_price: currencyFormatter(price, currency),
+      regular_price: parseFloat(price) && parseFloat(price) > 0 ? currencyFormatter(price, currency) : '',
       sale_price: '',
       percent_sale: 0
     };

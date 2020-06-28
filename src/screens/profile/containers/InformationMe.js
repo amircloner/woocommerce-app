@@ -1,16 +1,16 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import {StyleSheet} from 'react-native';
-import {Text, ListItem} from 'src/components';
-import {grey4} from 'src/components/config/colors';
+import { StyleSheet } from 'react-native';
+import { Text, ListItem } from 'src/components';
+import { grey4 } from 'src/components/config/colors';
 
-import {margin, padding} from 'src/components/config/spacing';
-import {profileStack} from 'src/config/navigator';
-import {icon, titleProps} from './config';
+import { margin, padding } from 'src/components/config/spacing';
+import { profileStack } from 'src/config/navigator';
+import { icon, titleProps } from './config';
 
-const InformationMe = ({isLogin, clickPage}) => {
-  const {t} = useTranslation();
+const InformationMe = ({ isLogin, clickPage }) => {
+  const { t } = useTranslation();
   if (!isLogin) {
     return null;
   }
@@ -33,8 +33,17 @@ const InformationMe = ({isLogin, clickPage}) => {
         titleProps={titleProps}
         chevron
         pad={padding.large}
-        containerStyle={styles.itemEnd}
         onPress={() => clickPage(profileStack.order_list)}
+      />
+      <ListItem
+        leftIcon={icon(3, 'info')}
+        title={t('common:text_downloads')}
+        type="underline"
+        titleProps={titleProps}
+        chevron
+        pad={padding.large}
+        containerStyle={styles.itemEnd}
+        onPress={() => clickPage(profileStack.downloads)}
       />
       {/*<ListItem*/}
       {/*  leftIcon={icon(2, 'info')}*/}
@@ -62,6 +71,6 @@ const styles = StyleSheet.create({
 
 InformationMe.defaultProps = {
   isLogin: false,
-  clickPage: () => {},
+  clickPage: () => { },
 };
 export default InformationMe;

@@ -4,13 +4,16 @@ import upperFirst from 'lodash/upperFirst';
 
 import { red, green, yellow, teal } from 'src/components/config/colors';
 
-export const strDate = (date = new Date()) => {
-  return moment(date).format('hh:mm a   DD/MM/YYYY');
+export const strDate = (date) => {
+  if (!date) {
+    return null;
+  }
+  return moment.parseZone(date).format('hh:mm a   DD/MM/YYYY');
 };
 
-export const strDate2 = (date = new Date()) => {
-  const dateStr = moment(date).format('MMM D, YYYY');
-  const timeStr = moment(date).format('hh:mm a');
+export const strDate2 = (date) => {
+  const dateStr = moment.parseZone(date).format('MMM D, YYYY');
+  const timeStr = moment.parseZone(date).format('hh:mm a');
   return `${dateStr} at ${timeStr}`;
 };
 

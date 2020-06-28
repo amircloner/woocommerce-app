@@ -4,7 +4,12 @@ import firebase from '@react-native-firebase/app';
 
 import trim from 'lodash/trim';
 
-import {StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {Loading} from 'src/components';
 import {ThemedView, Text, Header} from 'src/components';
 import {IconHeader, TextHeader} from 'src/containers/HeaderComponent';
@@ -24,14 +29,15 @@ import {showMessage} from 'react-native-flash-message';
 import {margin} from 'src/components/config/spacing';
 import {changeColor} from 'src/utils/text-html';
 import {checkPhoneNumber} from 'src/modules/auth/service';
+import { INITIAL_COUNTRY } from 'src/config/config-input-phone-number';
 
 class LoginMobile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: null,
-      phone_number: '+91',
-      country_no: '+91',
+      phone_number: '',
+      country_no: '',
       visibleModal: false,
       loading: false,
       error: {
@@ -49,10 +55,10 @@ class LoginMobile extends React.Component {
         this.setState({
           user,
         });
-        const {confirmResult} = this.state;
-        if (confirmResult) {
-          this.handleLogin(true);
-        }
+      }
+
+      if (this.state.confirmResult && Platform.OS === 'android') {
+        this.handleLogin(true);
       }
     });
   }
@@ -104,7 +110,7 @@ class LoginMobile extends React.Component {
 
       // Check phone number on database
       await checkPhoneNumber({
-        phone_number: user_phone_number,
+        digits_phone: user_phone_number,
         type: 'login',
       });
 
@@ -174,6 +180,7 @@ class LoginMobile extends React.Component {
               ) : null}
               <InputMobile
                 value={phone_number}
+                initialCountry={INITIAL_COUNTRY}
                 onChangePhoneNumber={({value, code}) =>
                   this.setState({phone_number: trim(value), country_no: code})
                 }
@@ -182,31 +189,29 @@ class LoginMobile extends React.Component {
               <Button
                 title={t('common:text_signin')}
                 containerStyle={styles.button}
-                loading={loading}
+                loading={loading || pendingMobile}
                 onPress={this.clickLogin}
               />
             </Container>
           </ScrollView>
         </KeyboardAvoidingView>
-        {visible && (
-          <ModalVerify
-            visible={visible}
-            confirmation={confirmResult}
-            handleVerify={this.handleLogin}
-            setModalVisible={visibleModal =>
-              this.setState({
-                visibleModal,
-                loading: false,
-                confirmResult: null,
-              })
-            }
-            phone={
-              phone_number.includes(country_no)
-                ? phone_number
-                : country_no + phone_number
-            }
-          />
-        )}
+        <ModalVerify
+          visible={visible}
+          confirmation={confirmResult}
+          handleVerify={this.handleLogin}
+          setModalVisible={visibleModal =>
+            this.setState({
+              visibleModal,
+              loading: false,
+              confirmResult: null,
+            })
+          }
+          phone={
+            phone_number.includes(country_no)
+              ? phone_number
+              : country_no + phone_number
+          }
+        />
       </ThemedView>
     );
   }

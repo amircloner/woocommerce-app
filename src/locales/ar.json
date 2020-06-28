@@ -65,7 +65,9 @@
     "text_search_country_mobile" : "أكتب هنا...",
     "text_add" : "إضافة",
     "text_save" : "حفظ",
-    "text_sales" : "مبيعات"
+    "text_sales" : "مبيعات",
+    "text_state" : "ولايه دوله",
+    "text_downloads": "التحميلات",
   },
   "auth": {
     "text_input_email_address": "عنوان البريد الإلكتروني أو اسم المستخدم *",
@@ -237,6 +239,7 @@
     "text_contact": "اتصل بنا",
     "text_privacy": "سياسات الخصوصية",
     "text_term": "اتفاقية الاستخدام",
+    "text_term_content": "اتفاقية الاستخدام...",
     "text_about": "من نحن",
     "text_rate_app": "قيم هذا التطبيق",
 
@@ -286,6 +289,8 @@
     "text_subtitle_category": "يرجى الاتصال مع المشرف لإضافة فئات",
     "text_title_product": "لا يوجد لديك أي منتجات",
     "text_subtitle_product": "يرجى تأتي في فئة أخرى أو قيمة التصفية",
+    "text_title_product_no_category": "ليس لديك أي هذه الفئة",
+    "text_subtitle_product_no_category": "يرجى تأتي في فئة أخرى أو قيمة التصفية",
     "text_title_product_detail": "لم يتم الحصول على معلومات المنتج",
     "text_subtitle_product_detail": "تحقق المنتج معرف",
     "text_title_wishlist": "قائمة رغباتك فارغة",
@@ -293,7 +298,8 @@
     "text_title_cart": "سلة التسوق فارغة",
     "text_subtitle_cart": "المنتجات المضافة إلى السلة سوف تظهر هنا",
     "text_title_order": "لم تطلب بعد",
-    "text_subtitle_order": "طلباتي"
+    "text_subtitle_order": "طلباتي",
+    "text_title_download": "You have not file yet",
   },
   "validators" : {
     "text_email": "البريد الإلكتروني غير صحيح!",
@@ -314,6 +320,8 @@
     "text_fill_value": "هناك بعض المعلومات غير صحيحة",
     "text_create_user_success": "تم إنشاء الحساب بنجاح.",
     "text_forgot_password_success": "تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور.",
-    "text_change_password_success": "تم تحديث كلمة المرور"
+    "text_change_password_success": "تم تحديث كلمة المرور",
+    "text_download_success": "نجاح التحميل",
+    "text_no_permission_write_file": "ليس لديك إذن بحفظ الملف على هاتفك"
   }
 }

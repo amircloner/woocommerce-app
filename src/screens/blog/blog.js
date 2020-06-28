@@ -3,6 +3,7 @@ import React from 'react';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import merge from 'lodash/merge';
+import unescape from 'lodash/unescape';
 
 import {
   StyleSheet,
@@ -104,7 +105,7 @@ class BlogDetail extends React.Component {
             {timeAgo(blog.date)}
           </Text>
           <Text h2 medium style={styles.textTitle}>
-            {blog.title.rendered}
+            {unescape(blog.title.rendered)}
           </Text>
           {/*<TextHtml value={text} style={styleHtml(theme)} />*/}
           <InfoViewer categories={blog._categories} user={blog.author_url} />
@@ -172,6 +173,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     lang: languageSelector(state),
+
   };
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { Text, ThemedView } from 'src/components';
 
-import fetch from 'src/utils/request';
+import fetch from 'src/utils/fetch';
 import { borderRadius, margin, padding } from 'src/components/config/spacing';
 
 import { strDate2 } from './config';
@@ -24,7 +24,7 @@ class NoteOrder extends React.Component {
     try {
       const { id } = this.props;
       if (id) {
-        const URL = `/wc/v3/orders/${id}/notes`;
+        const URL = `/wc/v3/orders/${id}/notes?type=customer`;
         const data = await fetch(URL);
         this.setState({
           loading: false,
@@ -56,7 +56,7 @@ class NoteOrder extends React.Component {
           {note.note}
         </Text>
         <Text h6 colorThird>
-          {strDate2(note.date_created_gmt)}
+          {strDate2(note.date_created)}
         </Text>
       </ThemedView>
     ));

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
+import unescape from 'lodash/unescape';
 import {ScrollView, StyleSheet, View, FlatList, TouchableOpacity, Dimensions} from 'react-native';
 import {ThemedView, Text, Image} from 'src/components';
 import EmptyCategory from './EmptyCategory';
@@ -8,6 +9,8 @@ import ParentCategory from './ParentCategory';
 
 import {categorySelector} from 'src/modules/category/selectors';
 import {borderRadius, margin, padding} from 'src/components/config/spacing';
+import {excludeCategory} from 'src/utils/category';
+import {exclude_categories} from 'src/config/category';
 
 const noImage = require('src/assets/images/imgCateDefault.png');
 const {width} = Dimensions.get('window');
@@ -19,48 +22,49 @@ const sizeItem = (width - widthTabParent - (2 * margin.small) - (2 * pad) -(2* p
 class Style2 extends React.Component {
   constructor(props) {
     super(props);
-    const {category: {data}} = props;
-    const listParent = data.filter(value => value.parent === 0);
-
-    const parent = listParent && listParent[0] ? listParent[0].id: null;
+    const {
+      category: {data},
+    } = props;
+    const listParent = excludeCategory(data, exclude_categories);
+    const parent = listParent[0] ? listParent[0] : null;
     this.state = {
       listParent,
-      parent
-    }
+      parent,
+    };
   }
-  changeParent = id => {
+  changeParent = item => {
     this.setState({
-      parent: id,
+      parent: item,
     });
   };
 
   render() {
-    const {category: {data}, t, goProducts} = this.props;
+    const {t, goProducts} = this.props;
     const {listParent, parent} = this.state;
 
     if (listParent.length < 1) {
-      return (
-        <EmptyCategory />
-      )
+      return <EmptyCategory />;
     }
 
-    const listData = data.filter(value => value.parent === parent || value.id === parent);
-    const parentCategory = listParent.find(v => v.id === parent);
+    // const childCategories = parent && parent.categories ? parent.categories : [];
+
+    const _childCategories = parent && parent.categories ? parent.categories : [];
+    const childCategories = excludeCategory(_childCategories, exclude_categories);
 
     return (
       <ThemedView colorSecondary isFullView style={styles.container}>
         <ParentCategory data={listParent} selectVisit={parent} onChange={this.changeParent} width={widthTabParent}/>
         <View style={styles.content}>
-          {listParent.length < 1 ? (
+          {childCategories.length < 1 ? (
             <ThemedView isFullView>
               <EmptyCategory />
             </ThemedView>
             ) : (
             <>
               <ThemedView>
-                <TouchableOpacity onPress={() => goProducts(parentCategory)} style={styles.viewTextParent}>
+                <TouchableOpacity onPress={() => goProducts(parent)} style={styles.viewTextParent}>
                   <Text h5 medium style={styles.nameParent}>
-                    {t('catalog:text_shop_name',{name: parentCategory && parentCategory.name})}
+                    {t('catalog:text_shop_name', {name: parent && parent.name ? unescape(parent.name): ''})}
                   </Text>
                   <Text h6 colorThird>
                     {t('catalog:text_view_all_category')}
@@ -69,7 +73,7 @@ class Style2 extends React.Component {
               </ThemedView>
               <ScrollView>
                 <ThemedView style={styles.viewChildren}>
-                  {listData.map((item => (
+                  {childCategories.map((item => (
                     <TouchableOpacity
                       key={item.id}
                       style={[
@@ -86,7 +90,7 @@ class Style2 extends React.Component {
                         }}
                         containerStyle={styles.image}
                       />
-                      <Text h6 style={styles.name}>{item.name}</Text>
+                      <Text h6 style={styles.name}>{unescape(item.name)}</Text>
                     </TouchableOpacity>
                   )))}
                 </ThemedView>

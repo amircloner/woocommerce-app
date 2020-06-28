@@ -1,6 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import concat from 'lodash/concat';
+import find from 'lodash/find';
+import flatMap from 'lodash/flatMap';
+import compact from 'lodash/compact';
+import unescape from 'lodash/unescape';
+
 import {Map, fromJS} from 'immutable';
 
 import {View, StyleSheet} from 'react-native';
@@ -26,9 +31,30 @@ import {margin} from 'src/components/config/spacing';
 import {mainStack, homeTabs} from 'src/config/navigator';
 import {categorySelector} from 'src/modules/category/selectors';
 
+const findCategory = (categoryId = '', lists = []) => {
+  if (!categoryId || !lists || lists.length < 1) {
+    return null;
+  }
+  var loopWhile = true;
+
+  var category = null;
+  var listFlat = lists;
+
+  while(loopWhile && listFlat.length > 0) {
+    const categoryFind = find(listFlat, c => c.id == categoryId);
+    if (categoryFind) {
+      category = categoryFind;
+      loopWhile = false;
+    } else {
+      listFlat = compact(flatMap(listFlat, ca => ca.categories));
+    }
+  }
+  return category;
+};
+
 class ProductsScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props, context) {
@@ -39,16 +65,13 @@ class ProductsScreen extends React.Component {
       categories,
     } = props;
 
-    const category = navigation.getParam('id', '');
-    let name = navigation.getParam('name', '');
-
-    if (!name) {
-      const findCategory = categories.find(c => c.id == category);
-      name =
-        findCategory && findCategory.name
-          ? findCategory.name
-          : t('common:text_category');
-    }
+    const categoryId = navigation.getParam('id', '');
+    const category = findCategory(categoryId, categories);
+    const name = navigation.getParam('name', '')
+      ? navigation.getParam('name', '')
+      : category && category.name
+      ? category.name
+      : t('common:text_product');
 
     this.state = {
       category,
@@ -99,7 +122,11 @@ class ProductsScreen extends React.Component {
       .merge(navigation.getParam('filterBy', Map()))
       .set(
         'category',
-        filterBy.get('category') ? filterBy.get('category') : category,
+        filterBy.get('category')
+          ? filterBy.get('category')
+          : category && category.id
+          ? category.id
+          : '',
       );
     return getProducts(query.toJS());
   };
@@ -118,10 +145,13 @@ class ProductsScreen extends React.Component {
           };
         });
       } else {
-        this.setState({
-          loadingMore: false,
-          loading: false,
-          refreshing: false,
+        this.setState(preState => {
+          return {
+            loadingMore: false,
+            loading: false,
+            refreshing: false,
+            data: page === 1 ? [] : preState.data,
+          };
         });
       }
     } catch (e) {
@@ -134,7 +164,7 @@ class ProductsScreen extends React.Component {
   handleCategoryPress = (id, name) => {
     this.props.navigation.push(mainStack.products, {
       id: id,
-      name: name,
+      name: unescape(name),
     });
   };
 
@@ -168,19 +198,17 @@ class ProductsScreen extends React.Component {
 
   render() {
     const {
-      categories,
       navigation,
       screenProps: {t},
     } = this.props;
     const {category, name, data, loading, loadingMore, refreshing} = this.state;
 
-    const subsCategory = categories.filter(cat => cat.parent === category);
-
+    // const subsCategory = categories.filter(cat => cat.parent === category);
     return (
       <ThemedView isFullView>
         <Header
           leftComponent={<IconHeader />}
-          centerComponent={<TextHeader title={name} />}
+          centerComponent={<TextHeader title={unescape(name)} />}
           rightComponent={<CartIcon />}
         />
         {loading ? (
@@ -188,12 +216,12 @@ class ProductsScreen extends React.Component {
         ) : data.length ? (
           <View style={styles.viewList}>
             <Container style={styles.viewRefineSwitch}>
-              <Refine onPress={() => navigation.navigate(mainStack.refine, {parent: category, data})}/>
+              <Refine onPress={() => navigation.navigate(mainStack.refine, {category: category, data})}/>
               <SwitchProduct />
             </Container>
             <CategoryList
               onPress={this.handleCategoryPress}
-              data={subsCategory}
+              data={category && category.categories ? category.categories: null}
             />
             <ProductView
               data={fromJS(data)}

@@ -18,8 +18,6 @@ import Button from 'src/containers/Button';
 import {green} from 'src/components/config/colors';
 import {margin} from 'src/components/config/spacing';
 
-const number_code = 6;
-
 class ModalVerify extends React.Component {
   constructor(props) {
     super(props);
@@ -115,6 +113,15 @@ class ModalVerify extends React.Component {
     }
   };
 
+  componentDidUpdate(prevProps) {
+    const { confirmation } = this.props;
+    if (confirmation && confirmation != prevProps.confirmation) {
+      this.setState({
+        confirmation: this.props.confirmation
+      });
+    }
+  }
+
   render() {
     const {loading, loadingResend} = this.state;
     const {visible, setModalVisible, t} = this.props;
@@ -133,7 +140,6 @@ class ModalVerify extends React.Component {
           <ScrollView>
             <Container style={styles.viewContent}>
               <InputCode
-                codeLength={number_code}
                 containerStyle={styles.input}
                 onCodeChange={value => this.setState({code: value})}
                 onFulfill={otp => this.verifyOtp(otp)}

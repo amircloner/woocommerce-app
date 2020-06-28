@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
+import unescape from 'lodash/unescape';
 import {StyleSheet, View} from 'react-native';
 import {ThemedView} from 'src/components';
 
@@ -25,7 +25,7 @@ class CategoryScreen extends Component {
   goProducts = item => {
     this.props.navigation.navigate(mainStack.products, {
       id: item.id,
-      name: item.name,
+      name: unescape(item.name),
     });
   };
   render() {

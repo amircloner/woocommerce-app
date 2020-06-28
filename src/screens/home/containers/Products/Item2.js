@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'redux';
 import {withNavigation} from 'react-navigation';
 import {useTranslation} from 'react-i18next';
+import unescape from 'lodash/unescape';
 
 import {StyleSheet, ActivityIndicator, View, TouchableOpacity} from 'react-native';
 import {Text, Image, withTheme, Badge} from 'src/components';
@@ -44,7 +45,7 @@ const Item2 = ({item, width, height, navigationType, style, theme, navigation}) 
         PlaceholderContent={<ActivityIndicator />}
       />
       <View style={styles.content}>
-        <Text medium colorSecondary style={styles.name}>{name}</Text>
+        <Text medium colorSecondary style={styles.name}>{unescape(name)}</Text>
         <Price price_format={price_format} type={type}/>
         <View style={styles.viewBadge}>
           {is_new ? <Badge value={t('common:text_new')} status="success" containerStyle={styles.badge} /> : null}

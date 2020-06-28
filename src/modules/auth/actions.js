@@ -116,13 +116,40 @@ export function changeEmail({u_password, u_email}) {
 }
 
 /**
- * Update address
+ * Update customer
  * @param data
- * @returns {{type: string, payload: {password: *, email: *}}}
+ * @returns {{type: string, payload: {data: *, cb: *}}}
  */
-export function updateShippingAddress(data) {
+export function updateCustomer(data, cb = () => {}) {
   return {
-    type: Actions.UPDATE_SHIPPING_ADDRESS,
+    type: Actions.UPDATE_CUSTOMER,
+    payload: {
+      data,
+      cb,
+    },
+  };
+}
+
+/**
+ * Update user
+ * @param data
+ * @returns {{type: string, payload: *}}
+ */
+export function updateShippingAddressSuccess(data) {
+  return {
+    type: Actions.UPDATE_SHIPPING_ADDRESS_SUCCESS,
+    payload: data,
+  };
+}
+
+/**
+ * Update user
+ * @param data
+ * @returns {{type: string, payload: *}}
+ */
+export function updateUserSuccess(data) {
+  return {
+    type: Actions.UPDATE_USER_SUCCESS,
     payload: data,
   };
 }
@@ -155,12 +182,50 @@ export function signOut() {
  * @param user
  * @returns {{payload: {identityToken: *, user: *}, type: string}}
  */
-export function signInWithApple(identityToken, user) {
+export function signInWithApple(payload) {
   return {
     type: Actions.SIGN_IN_WITH_APPLE,
+    payload,
+  };
+}
+
+/**
+ * Sign Up with OTP
+ * @param data
+ * @returns {{type: string, payload: *}}
+ */
+export function signUpWithOtp(data) {
+  return {
+    type: Actions.SIGN_UP_WITH_OTP,
     payload: {
-      identityToken,
-      user,
+      data,
     },
+  };
+}
+
+/**
+ * Sign In with OTP
+ * @param data
+ * @returns {{payload: {identityToken: *, user: *}, type: string}}
+ */
+export function signInWithOtp(data) {
+  return {
+    type: Actions.SIGN_IN_WITH_OTP,
+    payload: {
+      data,
+    },
+  };
+}
+
+
+/**
+ * Get List file download of user
+ * @param data
+ * @returns {{type: string, payload: *}}
+ */
+export function getFilesDonwload() {
+  return {
+    type: Actions.GET_LIST_FILE_DOWNLOAD,
+    payload: {},
   };
 }

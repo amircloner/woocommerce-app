@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Header, Text, ThemedView } from 'src/components';
+import { StyleSheet } from 'react-native';
+import { Header, ThemedView } from 'src/components';
 
 import { IconHeader, CartIcon, TextHeader } from 'src/containers/HeaderComponent';
-import Container from 'src/containers/Container';
 import ContainerPrivacy from './containers/ContainerPrivacy';
 
 import { margin } from 'src/components/config/spacing';
@@ -11,7 +10,7 @@ import { lineHeights } from 'src/components/config/fonts';
 
 export default class SettingScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
   render() {
     const {

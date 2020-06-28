@@ -5,12 +5,15 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { StyleSheet, ScrollView } from 'react-native';
 import { ThemedView, Text, ListItem } from 'src/components';
 import ItemCategoryMenu from './ItemCategoryMenu';
+import unescape from 'lodash/unescape';
 
 import { categorySelector } from 'src/modules/category/selectors';
 
 import { padding, margin } from 'src/components/config/spacing';
 
 import { homeDrawer, profileStack } from 'src/config/navigator';
+import {excludeCategory} from "../utils/category";
+import {exclude_categories_sidebar} from "../config/category";
 
 const dataHelpInfo = [
   {
@@ -41,10 +44,6 @@ const dataHelpInfo = [
 ];
 
 class Sidebar extends React.Component {
-  getListCategory = (parent = 0) => {
-    const { category } = this.props;
-    return category.data.filter(item => item.parent === parent);
-  };
 
   handlePage = (router, params = {}) => {
     const { navigation } = this.props;
@@ -56,21 +55,26 @@ class Sidebar extends React.Component {
 
   render() {
     const {
+      category,
       navigation,
       screenProps: { t },
     } = this.props;
-    const dataCategory = this.getListCategory();
+
+    const { data } = category;
+
+    // Filter include category
+    const _data = excludeCategory(data, exclude_categories_sidebar);
+
     return (
       <ThemedView isFullView>
         <ScrollView>
           <Text h3 medium style={[styles.title, styles.titleHead]}>
             {t('common:text_category')}
           </Text>
-          {dataCategory.map(c => (
+          {_data.map(c => (
             <ItemCategoryMenu
               key={c.id}
               category={c}
-              subCategories={this.getListCategory(c.id)}
               isOpen={navigation.state && navigation.state.isDrawerOpen ? navigation.state.isDrawerOpen : false}
               goProducts={this.handlePage}
             />

@@ -1,13 +1,14 @@
-import request from 'src/utils/request';
+import request from 'src/utils/fetch';
 import queryString from 'query-string';
+import pickBy from 'lodash/pickBy';
 
 /**
  * Fetch product data
  * @returns {*}
  */
 
-export const getProducts = query =>
-  request.get(`/wc/v3/products?${queryString.stringify(query, { arrayFormat: 'comma' })}`);
+export const getProducts = (query, options = {}) =>
+  request.get(`/wc/v3/products?${queryString.stringify(pickBy(query, item => item !== ""), { arrayFormat: 'comma' })}`, options);
 
 /**
  * Fetch single product
@@ -24,6 +25,14 @@ export const getSingleProduct = (id, lang) =>
  */
 export const getSingleBlog = (id, lang) =>
   request.get(`/wp/v2/posts/${id}?lang=${lang}`);
+
+/**
+ * Fetch single page
+ * @param id : page id
+ * @returns {*}
+ */
+export const getSinglePage = (id, lang) =>
+    request.get(`/wp/v2/pages/${id}?lang=${lang}`);
 
 /**
  * Get top sellers
@@ -54,17 +63,22 @@ export const getProductReviews = product_id => request.get(`/wc/v3/products/revi
  *  Get rating product reviews
  * @returns {*}
  */
-export const getRatingProductReviews = product_id => request.get(`/generace-app-control/v1/rating-count?product_id=${product_id}`);
+export const getRatingProductReviews = product_id => request.get(`/rnlab-app-control/v1/rating-count?product_id=${product_id}`);
 
 /**
  *  Get rating product reviews
  * @returns {*}
  */
-export const addProductReviews = data => request.post(`/wc/v3/products/reviews`, data);
+export const addProductReviews = data => request.post(`/rnlab-app-control/v1/reviews`, data);
 
 /**
  *  Get product variations
  * @returns {*}
  */
-export const getVariations = (product_id, lang, cancelToken) =>
-  request.get(`/wc/v3/products/${product_id}/variations?lang=${lang}&per_page=100`, { cancelToken });
+export const getVariations = (product_id, lang, options = {}) => request.get(`/wc/v3/products/${product_id}/variations?lang=${lang}&per_page=100`, options);
+
+/**
+ *  Get product variations
+ * @returns {*}
+ */
+export const getVariationId = (product_id, variation_id, lang, options = {}) => request.get(`/wc/v3/products/${product_id}/variations/${variation_id}?lang=${lang}`, options);

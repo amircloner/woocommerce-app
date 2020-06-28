@@ -147,8 +147,8 @@ android {
         applicationId "com.rn_oreo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1579343927
-        versionName "1.2.5"
+        versionName "1.4.3"
+        versionCode 1588551085
         multiDexEnabled true
     }
 

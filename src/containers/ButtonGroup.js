@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import unescape from 'lodash/unescape';
 import {StyleSheet, View, TouchableOpacity, ScrollView} from 'react-native';
 import {Text, Badge, withTheme} from 'src/components';
 import {grey6} from 'src/components/config/colors';
@@ -57,7 +58,7 @@ const ButtonGroup = (props: Props) => {
               colorSecondary={index !== visit}
               style={[styles.name, textStyle && textStyle]}
             >
-              {item.name}
+              {unescape(item.name)}
             </Text>
             {item.showNumber ? (
               <Badge

@@ -11,6 +11,7 @@ import {
   View,
   Switch,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {Header, Loading, Text, ThemedView} from 'src/components';
 import Container from 'src/containers/Container';
@@ -33,10 +34,11 @@ import {margin, padding} from 'src/components/config/spacing';
 import {lineHeights} from 'src/components/config/fonts';
 import {changeColor} from 'src/utils/text-html';
 import {showMessage} from 'react-native-flash-message';
+import {INITIAL_COUNTRY} from 'src/config/config-input-phone-number';
 
 class RegisterScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props, context) {
@@ -48,8 +50,8 @@ class RegisterScreen extends React.Component {
         name: '',
         email: '',
         password: '',
-        phone_number: '+91',
-        country_no: '+91',
+        phone_number: '',
+        country_no: '',
         subscribe: false,
       },
       user: null,
@@ -65,16 +67,16 @@ class RegisterScreen extends React.Component {
   }
 
   componentDidMount() {
-    const {data, confirmResult} = this.state;
-    this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
+    this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        const {data} = this.state;
         this.setState({
           user,
           data: {...data, phone_number: user.phoneNumber},
         });
-        if (confirmResult) {
-          this.register();
-        }
+      }
+      if (this.state.confirmResult && Platform.OS === 'android') {
+        this.register();
       }
     });
   }
@@ -85,7 +87,7 @@ class RegisterScreen extends React.Component {
     }
   }
 
-  changeData = value => {
+  changeData = (value) => {
     this.setState({
       data: {
         ...this.state.data,
@@ -95,9 +97,22 @@ class RegisterScreen extends React.Component {
   };
 
   register = () => {
+    const {enablePhoneNumber} = this.props;
     const {data} = this.state;
-    this.setState({ loading: false });
-    this.props.dispatch(signUpWithEmail(data));
+    let payload = data;
+    if (enablePhoneNumber) {
+      const user_phone_number = data.phone_number.includes(data.country_no)
+        ? data.phone_number
+        : data.country_no + data.phone_number;
+      payload = Object.assign(data, {
+        enable_phone_number: true,
+        digits_phone: user_phone_number,
+        digt_countrycode: data.country_no,
+        digits_phone_no: data.phone_number,
+      });
+    }
+    this.setState({loading: false});
+    this.props.dispatch(signUpWithEmail(payload));
   };
 
   /**
@@ -122,14 +137,14 @@ class RegisterScreen extends React.Component {
           ? phone_number
           : country_no + phone_number;
         await checkPhoneNumber({
-          phone_number: user_phone_number,
+          digits_phone: user_phone_number,
           type: 'register',
         });
         if (!user) {
           // Send Verify token
-          const confirmResult = await firebase.auth().signInWithPhoneNumber(
-              user_phone_number,
-          );
+          const confirmResult = await firebase
+            .auth()
+            .signInWithPhoneNumber(user_phone_number);
           this.setState({
             confirmResult,
           });
@@ -198,24 +213,25 @@ class RegisterScreen extends React.Component {
               <Input
                 label={t('auth:text_input_first_name')}
                 value={first_name}
-                onChangeText={value => this.changeData({first_name: value})}
+                onChangeText={(value) => this.changeData({first_name: value})}
                 error={errors && errors.first_name}
               />
               <Input
                 label={t('auth:text_input_last_name')}
                 value={last_name}
-                onChangeText={value => this.changeData({last_name: value})}
+                onChangeText={(value) => this.changeData({last_name: value})}
                 error={errors && errors.last_name}
               />
               <Input
                 label={t('auth:text_input_user')}
                 value={name}
-                onChangeText={value => this.changeData({name: value})}
+                onChangeText={(value) => this.changeData({name: value})}
                 error={errors && errors.name}
               />
               {enablePhoneNumber ? (
                 <InputMobile
                   value={phone_number}
+                  initialCountry={INITIAL_COUNTRY}
                   onChangePhoneNumber={({value, code}) =>
                     this.changeData({phone_number: value, country_no: code})
                   }
@@ -225,14 +241,14 @@ class RegisterScreen extends React.Component {
               <Input
                 label={t('auth:text_input_email')}
                 value={email}
-                onChangeText={value => this.changeData({email: value})}
+                onChangeText={(value) => this.changeData({email: value})}
                 error={errors && errors.email}
               />
               <Input
                 label={t('auth:text_input_password')}
                 value={password}
                 secureTextEntry
-                onChangeText={value => this.changeData({password: value})}
+                onChangeText={(value) => this.changeData({password: value})}
                 error={errors && errors.password}
               />
               <View style={styles.viewSwitch}>
@@ -241,13 +257,13 @@ class RegisterScreen extends React.Component {
                 </Text>
                 <Switch
                   value={subscribe}
-                  onValueChange={value => this.changeData({subscribe: value})}
+                  onValueChange={(value) => this.changeData({subscribe: value})}
                 />
               </View>
               <Button
                 title={t('auth:text_register')}
                 onPress={this.handleRegister}
-                loading={loading}
+                loading={loading || pending}
               />
               <SocialMethods style={styles.viewAccount} />
               <Text
@@ -256,26 +272,24 @@ class RegisterScreen extends React.Component {
                 onPress={() => navigation.navigate(authStack.login)}>
                 {t('auth:text_already_account')}
               </Text>
-              {visible && (
-                <ModalVerify
-                  visible={visible}
-                  type={'register'}
-                  phone={
-                    phone_number.includes(country_no)
-                      ? phone_number
-                      : country_no + phone_number
-                  }
-                  confirmation={confirmResult}
-                  handleVerify={this.register}
-                  setModalVisible={visibleModal =>
-                    this.setState({
-                      visibleModal,
-                      loading: false,
-                      confirmResult: null,
-                    })
-                  }
-                />
-              )}
+              <ModalVerify
+                visible={visible}
+                type={'register'}
+                phone={
+                  phone_number.includes(country_no)
+                    ? phone_number
+                    : country_no + phone_number
+                }
+                confirmation={confirmResult}
+                handleVerify={this.register}
+                setModalVisible={(visibleModal) =>
+                  this.setState({
+                    visibleModal,
+                    loading: false,
+                    confirmResult: null,
+                  })
+                }
+              />
             </Container>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -309,7 +323,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const configs = configsSelector(state);
   return {
     auth: authSelector(state),

@@ -59,6 +59,7 @@ class ShippingAddress extends React.Component {
               label={t('inputs:text_country')}
               value={data.get('country')}
               onChange={onChange}
+              state={data.get('state')}
             />
           </Col>
         </Row>

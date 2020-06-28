@@ -1,5 +1,6 @@
 import React from 'react';
 import {withNavigation} from 'react-navigation';
+import unescape from 'lodash/unescape';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {withTheme, Text, Image} from 'src/components';
 import InfoViewer from './InfoViewer';
@@ -9,7 +10,7 @@ import {margin, padding, borderRadius} from 'src/components/config/spacing';
 
 import {timeAgo} from 'src/utils/time';
 
-const ItemBlog = ({navigation, item, theme, width, height, style}) => {
+const ItemBlog = ({navigation, item, theme, width, height, style, tz}) => {
   if (!item || typeof item !== 'object') {
     return null;
   }
@@ -43,8 +44,8 @@ const ItemBlog = ({navigation, item, theme, width, height, style}) => {
         containerStyle={styles.viewImage}
       />
       <View style={styles.viewRight}>
-        <Text h4 medium style={styles.name}>{item.title && item.title.rendered}</Text>
-        <Text h6 colorThird style={styles.time}>{timeAgo(item.date)}</Text>
+        <Text h4 medium style={styles.name}>{unescape(item.title.rendered)}</Text>
+        <Text h6 colorThird style={styles.time}>{timeAgo(item.date, tz)}</Text>
         <InfoViewer
           categories={item._categories}
           urlUser={item.author_url}

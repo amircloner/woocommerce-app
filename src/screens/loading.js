@@ -1,10 +1,11 @@
 // @flow
 
 import React, {Component} from 'react';
+import { Platform } from 'react-native';
 import {NavigationScreenProps} from 'react-navigation';
 
-import isArray from 'lodash/isArray';
-import isObject from 'lodash/isObject';
+// import isArray from 'lodash/isArray';
+// import isObject from 'lodash/isObject';
 
 import {connect} from 'react-redux';
 import {fetchSettingSuccess} from 'src/modules/common/actions';
@@ -42,14 +43,16 @@ class LoadingScreen extends Component<Props> {
       } = this.props;
 
       // Fetch setting
-      const settings = await fetchSetting();
-      const configs = await fetchConfig();
-      const templates = await fetchTemplate();
+      let settings = await fetchSetting();
+      // const configs = await fetchConfig();
+      // const templates = await fetchTemplate();
+
+      const { configs, templates, ...rest } = settings;
 
       initSetting({
-        settings: isObject(settings) ? settings : {},
-        configs: isObject(configs) ? configs : {},
-        templates: isArray(templates) ? templates : []
+        settings: rest,
+        configs: configs,
+        templates: templates
       });
       // Fetch categories
       fetchCategories();
@@ -57,7 +60,7 @@ class LoadingScreen extends Component<Props> {
       navigation.navigate(router);
       SplashScreen.hide();
     } catch (e) {
-      console.warn(e);
+      console.error(e);
     }
   };
 

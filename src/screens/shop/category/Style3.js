@@ -1,6 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
+import concat from 'lodash/concat';
+import unescape from 'lodash/unescape';
 import {StyleSheet, FlatList, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
 import Container from 'src/containers/Container';
 import OpacityView from 'src/containers/OpacityView';
@@ -10,7 +12,9 @@ import EmptyCategory from './EmptyCategory';
 import {categorySelector} from 'src/modules/category/selectors';
 import {borderRadius, margin, padding} from 'src/components/config/spacing';
 import {black, white} from 'src/components/config/colors';
-import ButtonGroup from '../../../containers/ButtonGroup';
+import ButtonGroup from 'src/containers/ButtonGroup';
+import {excludeCategory} from 'src/utils/category';
+import {exclude_categories} from 'src/config/category';
 
 const {width} = Dimensions.get('window');
 
@@ -19,14 +23,15 @@ const noImage = require('src/assets/images/imgCateDefault.png');
 class Style3 extends React.Component {
   constructor(props) {
     super(props);
-    const {category: {data}} = props;
-    const listParent = data.filter(value => value.parent === 0);
-
-    const parent = listParent && listParent[0] ? listParent[0].id: null;
+    const {
+      category: {data},
+    } = props;
+    const listParent = excludeCategory(data, exclude_categories);
+    const parent = listParent[0] ? listParent[0] : null;
     this.state = {
       listParent,
-      parent
-    }
+      parent,
+    };
   }
 
   changeParent = index => {
@@ -34,30 +39,38 @@ class Style3 extends React.Component {
     const findCategory = listParent.find((c, inx) => inx === index);
     if (findCategory && findCategory.id) {
       this.setState({
-        parent: findCategory.id,
+        parent: findCategory,
       });
     }
   };
 
   render() {
-    const {category: {data}, t, goProducts} = this.props;
+    const {t, goProducts} = this.props;
     const {listParent, parent} = this.state;
 
     if (listParent.length < 1) {
-      return (
-        <EmptyCategory />
-      )
+      return <EmptyCategory />;
     }
     const size = (width - 2 * padding.large - padding.small)/2;
-    const listData = data.filter(value => value.parent === parent || value.id === parent);
-    const sortData = listData.sort((a, b) => a.parent !== parent && b.parent === parent);
+
+    // const childCategories = parent && parent.categories ? parent.categories : [];
+    // const listData = parent ? concat(childCategories, parent) : childCategories;
+
+    const _childCategories =
+      parent && parent.categories ? parent.categories : [];
+    const childCategories = excludeCategory(
+      _childCategories,
+      exclude_categories,
+    );
+
+    const listData = parent ? concat(childCategories, parent) : childCategories;
 
     return (
       <>
         <Container disable="right">
           <ButtonGroup
             lists={listParent}
-            visit={listParent.findIndex(c => c.id === parent)}
+            visit={listParent.findIndex(c => parent && c.id === parent.id)}
             pad={40}
             containerStyle={styles.listParentCategory}
             contentContainerStyle={styles.contentListParentCategory}
@@ -66,7 +79,7 @@ class Style3 extends React.Component {
         </Container>
         <Notification containerStyle={styles.notification}/>
         {listData.length < 1 ? (
-          <EmptyCategory/>
+          <EmptyCategory />
         ) : (
           <Container style={styles.content}>
             <FlatList
@@ -75,7 +88,7 @@ class Style3 extends React.Component {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               keyExtractor={item => `${item.id}`}
-              data={sortData}
+              data={listData}
               renderItem={({item}) => (
                 <TouchableOpacity style={styles.item} onPress={() => goProducts(item)}>
                   <Image
@@ -88,7 +101,7 @@ class Style3 extends React.Component {
                   />
                   <OpacityView style={styles.viewText}>
                     <Text style={styles.text} h4 medium>
-                      {item.id === parent ? t('catalog:text_view_all') : item.name}
+                      {parent && item.id === parent.id ? t('catalog:text_view_all') : unescape(item.name)}
                     </Text>
                   </OpacityView>
                 </TouchableOpacity>

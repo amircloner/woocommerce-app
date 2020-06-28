@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
+import isEqual from 'lodash/isEqual';
 import {
   Modal,
   StyleSheet,
@@ -9,18 +10,19 @@ import {
   Dimensions,
   ActivityIndicator,
   Share,
+  Platform,
 } from 'react-native';
-import { Image, Icon } from 'src/components';
+import {Image, Icon} from 'src/components';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Pagination from 'src/containers/Pagination';
 import WishListIcon from 'src/containers/WishListIcon';
 import Container from 'src/containers/Container';
 
-import {getStatusBarHeight} from 'react-native-status-bar-height'
-import { black, white } from 'src/components/config/colors';
-import { padding, margin } from 'src/components/config/spacing';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {black, white} from 'src/components/config/colors';
+import {padding, margin} from 'src/components/config/spacing';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class ProductImages extends Component {
   constructor(props, context) {
@@ -29,11 +31,25 @@ class ProductImages extends Component {
       visible: false,
       indexCurrency: 0,
     };
+    this.flatListRef = null;
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.images && this.props.images && !isEqual(prevProps.images.toJS(), this.props.images.toJS())) {
+      this.ontop();
+    }
+  }
+
+  ontop = () => {
+    if (this.flatListRef) {
+      this.flatListRef.scrollToOffset({animated: true, offset: 0});
+    }
+  };
   shareProduct = () => {
-    const { url, name_product } = this.props;
+    const {url, name_product} = this.props;
     if (url) {
-      let message = Platform.OS === 'android' ? `${name_product}. ${url}` : name_product;
+      let message =
+        Platform.OS === 'android' ? `${name_product}. ${url}` : name_product;
 
       Share.share(
         {
@@ -48,38 +64,49 @@ class ProductImages extends Component {
           // excludedActivityTypes: [
           //   'com.apple.UIKit.activity.PostToTwitter'
           // ]
-        }
+        },
       );
     }
   };
 
-  renderItem = ({ item }) => {
-    const { height } = this.props;
+  renderItem = ({item}) => {
+    const {height} = this.props;
     return (
-      <TouchableOpacity activeOpacity={1} style={styles.viewImage} onPress={() => this.setState({ visible: true })}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.viewImage}
+        onPress={() => this.setState({visible: true})}>
         <Image
-          source={{ uri: item.src, cache: 'reload' }}
+          source={{uri: item.src, cache: 'reload'}}
           resizeMode="cover"
-          style={{ height: height, width: width }}
+          style={{height: height, width: width}}
           PlaceholderContent={<ActivityIndicator />}
         />
       </TouchableOpacity>
     );
   };
-  onViewableItemsChanged = ({ viewableItems }) => {
+  onViewableItemsChanged = ({viewableItems}) => {
     this.setState({
       indexCurrency: viewableItems[0] ? viewableItems[0].index : 0,
     });
   };
+  getItemLayout = (data, index) => {
+    return {length: width, offset: width * index, index};
+  };
+
   render() {
-    const {images, product_id} = this.props;
-    const { visible, indexCurrency } = this.state;
+    const {images, product_id, height} = this.props;
+    const {visible, indexCurrency} = this.state;
+    const dataImages = images.toJS();
 
     return (
       <View style={styles.container}>
         <FlatList
+          ref={ref => {
+            this.flatListRef = ref;
+          }}
           keyExtractor={(item, index) => `${item.id}${index}`}
-          data={images.toJS()}
+          data={dataImages}
           horizontal
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
@@ -89,22 +116,40 @@ class ProductImages extends Component {
           viewabilityConfig={{
             itemVisiblePercentThreshold: 50,
           }}
+          getItemLayout={this.getItemLayout}
+          ListHeaderComponent={
+            dataImages.length < 1 ? (
+              <Image
+                source={require('src/assets/images/pDefault.png')}
+                style={{height: height, width: width}}
+              />
+            ) : null
+          }
         />
         <View style={styles.viewFooter}>
-          <Pagination containerStyle={styles.viewPagination} activeVisit={indexCurrency} count={images.size} />
+          <Pagination
+            containerStyle={styles.viewPagination}
+            activeVisit={indexCurrency}
+            count={images.size}
+          />
           <Icon
             name="upload"
             color={black}
             size={19}
             onPress={this.shareProduct}
-            underlayColor='transparent'
+            underlayColor="transparent"
           />
           {/*<Icon name="heart" color={black} size={19} />*/}
-          <WishListIcon product_id={product_id} color={black} size={19} containerStyle={styles.iconWishlist}/>
+          <WishListIcon
+            product_id={product_id}
+            color={black}
+            size={19}
+            containerStyle={styles.iconWishlist}
+          />
         </View>
         <Modal visible={visible} transparent={true}>
           <ImageViewer
-            onCancel={() => this.setState({ visible: false })}
+            onCancel={() => this.setState({visible: false})}
             loadingRender={() => <ActivityIndicator />}
             enableSwipeDown={true}
             index={indexCurrency}
@@ -120,7 +165,7 @@ class ProductImages extends Component {
                   size={24}
                   color={white}
                   iconStyle={styles.iconClose}
-                  onPress={() => this.setState({ visible: false })}
+                  onPress={() => this.setState({visible: false})}
                 />
               </Container>
             )}
@@ -138,7 +183,7 @@ const styles = StyleSheet.create({
   viewImage: {
     flex: 1,
     width: width,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   viewFooter: {
     position: 'absolute',

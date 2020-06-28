@@ -114,7 +114,7 @@ class InputMobile extends Component {
             onClear={() => this.setState({search: ''})}
             containerStyle={styles.search}
           />
-          {dataCountry && (
+          {dataCountry && dataCountry.length > 0 ? (
             <FlatList
               data={dataCountry}
               renderItem={({item}) => (
@@ -144,7 +144,7 @@ class InputMobile extends Component {
               initialNumToRender={15}
               keyExtractor={item => item.key.toString()}
             />
-          )}
+          ) : null}
         </Modal>
       </View>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
+import unescape from 'lodash/unescape';
 
 import { ListItem } from 'src/components';
 import Container from 'src/containers/Container';
@@ -12,7 +13,6 @@ import { filterByProduct } from 'src/modules/product/actions';
 import { languageSelector } from 'src/modules/common/selectors';
 
 import { mainStack } from 'src/config/navigator';
-import {categorySelector} from '../../modules/category/selectors';
 
 class FilterCategory extends React.Component {
 
@@ -43,7 +43,7 @@ class FilterCategory extends React.Component {
     return (
       <ListItem
         key={item.id}
-        title={item.name}
+        title={unescape(item.name)}
         type="underline"
         small
         chevron={chevron}
@@ -66,32 +66,28 @@ class FilterCategory extends React.Component {
     const {
       navigation,
       filterBy,
-      screenProps: { t },
-      categories
+      screenProps: {t},
     } = this.props;
 
     // Get Category
-    const parent = navigation.getParam('parent', '');
-    let data = categories.filter(cat => cat.id === 0 || cat.id === '');
-    if (typeof parent === 'number') {
-      data = categories.filter(cat => cat.parent === parent);
-    }
+    const category = navigation.getParam('category', {});
+    const categories = category && category.categories ? category.categories  : [];
 
-    const checked = filterBy.get('category') && filterBy.get('category') !== parent;
+    const checked = filterBy.get('category') && filterBy.get('category') !== category.id;
     const chevron = checked ? true : { name: 'check', size: 18, isRotateRTL: false };
 
     return (
       <ViewRefine titleHeader={t('catalog:text_category')} handleResult={this.showResult} clearAll={this.clearAll}>
         <Container>
           <ListItem
-            key={parent}
+            key={category.id}
             title={t('catalog:text_all_category')}
             type="underline"
             small
             chevron={chevron}
-            onPress={() => this.selectItem(parent)}
+            onPress={() => this.selectItem(category.id)}
           />
-          {data.length > 0 && data.map(item => this.renderCategory(item))}
+          {categories.length > 0 && categories.map(item => this.renderCategory(item))}
         </Container>
       </ViewRefine>
     );
@@ -103,11 +99,9 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = state => {
-  const {data} = categorySelector(state);
   return {
     filterBy: filterBySelector(state),
     language: languageSelector(state),
-    categories: data,
   };
 };
 

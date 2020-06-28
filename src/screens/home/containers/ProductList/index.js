@@ -96,6 +96,8 @@ class ProductList extends Component {
   fetchData = () => {
     const { per_page, include } = this.state;
 
+    const { language } = this.props;
+
     this.setState(
       {
         loading: true,
@@ -103,6 +105,8 @@ class ProductList extends Component {
       async () => {
         try {
           const query = {
+            lang: language,
+            status: 'publish',
             include: take(include, per_page),
             per_page,
           };

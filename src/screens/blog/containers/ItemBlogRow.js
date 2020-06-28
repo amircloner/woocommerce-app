@@ -1,5 +1,6 @@
 import React from 'react';
-import {withNavigation} from 'react-navigation'
+import {withNavigation} from 'react-navigation';
+import unescape from 'lodash/unescape';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Image, Text, ThemedView} from 'src/components';
 import InfoViewer from './InfoViewer'
@@ -8,7 +9,7 @@ import {padding, margin, borderRadius} from 'src/components/config/spacing';
 import {timeAgo} from 'src/utils/time';
 import {blogStack} from 'src/config/navigator';
 
-const ItemBlogRow = ({item, width, height, style, navigation}) => {
+const ItemBlogRow = ({item, width, height, style, navigation, tz}) => {
   if (!item || typeof item !== 'object') {
     return null;
   }
@@ -30,11 +31,11 @@ const ItemBlogRow = ({item, width, height, style, navigation}) => {
         />
         <View style={styles.viewInfo}>
           <Text h4 medium style={styles.name} numberOfLines={2}>
-            {item.title && item.title.rendered}
+            {unescape(item.title.rendered)}
           </Text>
           <View>
             <Text h6 colorThird style={styles.time}>
-              {timeAgo(item.date)}
+              {timeAgo(item.date, tz)}
             </Text>
             <InfoViewer
               categories={item._categories}

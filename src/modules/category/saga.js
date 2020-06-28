@@ -1,6 +1,5 @@
 import {put, call, takeEvery, select} from 'redux-saga/effects';
 import * as Actions from './constants';
-import sortBy from 'lodash/sortBy';
 
 import {getCategories} from './service';
 import {languageSelector} from '../common/selectors';
@@ -13,11 +12,10 @@ function* fetchCategorySaga() {
   try {
     const lang = yield select(languageSelector);
     const query = {
-      per_page: 100,
       lang: lang
     };
     const data = yield call(getCategories, query);
-    yield put({type: Actions.GET_CATEGORIES_SUCCESS, payload: sortBy(data, 'menu_order')});
+    yield put({type: Actions.GET_CATEGORIES_SUCCESS, payload: data});
   } catch (e) {
     yield put({type: Actions.GET_CATEGORIES_ERROR, error: e});
   }

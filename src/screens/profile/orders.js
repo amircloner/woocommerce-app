@@ -1,17 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
-import { Header, ThemedView } from 'src/components';
+import {connect} from 'react-redux';
+import {StyleSheet, View, ActivityIndicator, FlatList} from 'react-native';
+import {Header, ThemedView} from 'src/components';
 import Empty from 'src/containers/Empty';
-import { IconHeader, CartIcon, TextHeader } from 'src/containers/HeaderComponent';
+import {IconHeader, CartIcon, TextHeader} from 'src/containers/HeaderComponent';
 import OrderItem from './order/OrderItem';
 
-import fetch from 'src/utils/request';
-import { authSelector } from 'src/modules/auth/selectors';
+import fetch from 'src/utils/fetch';
+import {authSelector} from 'src/modules/auth/selectors';
+import {languageSelector} from 'src/modules/common/selectors';
 
-import { homeTabs } from 'src/config/navigator';
+import {homeTabs} from 'src/config/navigator';
 
-import { margin } from 'src/components/config/spacing';
+import {margin} from 'src/components/config/spacing';
 
 class ListOrder extends React.Component {
   state = {
@@ -29,12 +30,13 @@ class ListOrder extends React.Component {
 
   fetchOrders = () => {
     const {
-      auth: { user },
+      auth: {user},
+      language,
     } = this.props;
-    const { page } = this.state;
-    const URL = `/wc/v3/orders?page=${page}&per_page=10&customer=${user.ID}`;
+    const {page} = this.state;
+    const URL = `/wc/v3/orders?page=${page}&per_page=10&customer=${user.ID}&lang=${language}`;
     // const URL = `/wc/v3/orders?page=${page}&per_page=10`;
-    fetch(URL)
+    fetch.get(URL)
       .then(data => {
         if (data.length <= 10 && data.length > 0) {
           this.setState((prevState) => ({
@@ -51,11 +53,11 @@ class ListOrder extends React.Component {
         }
       })
       .catch(error => {
-        this.setState({ error, loading: false, loadingMore: false });
+        this.setState({error, loading: false, loadingMore: false});
       });
   };
   _handleLoadMore = () => {
-    const { loadingMore } = this.state;
+    const {loadingMore} = this.state;
 
     if (loadingMore) {
       this.setState(
@@ -65,13 +67,15 @@ class ListOrder extends React.Component {
         }),
         () => {
           this.fetchOrders();
-        }
+        },
       );
     }
   };
 
   renderFooter = () => {
-    if (!this.state.loadingMore) return null;
+    if (!this.state.loadingMore) {
+      return null;
+    }
 
     return (
       <View
@@ -81,7 +85,7 @@ class ListOrder extends React.Component {
           justifyContent: 'center',
         }}
       >
-        <ActivityIndicator animating size="small" />
+        <ActivityIndicator animating size="small"/>
       </View>
     );
   };
@@ -94,17 +98,17 @@ class ListOrder extends React.Component {
       },
       () => {
         this.fetchOrders();
-      }
+      },
     );
   };
   renderData = () => {
-    const { data, loading, refreshing, } = this.state;
-    const { navigation, screenProps: { t } } = this.props;
+    const {data, loading, refreshing} = this.state;
+    const {navigation, screenProps: {t}} = this.props;
 
     if (loading) {
       return (
-        <View style={{ marginVertical: 16 }}>
-          <ActivityIndicator />
+        <View style={{marginVertical: 16}}>
+          <ActivityIndicator/>
         </View>
       );
     }
@@ -113,7 +117,7 @@ class ListOrder extends React.Component {
         <FlatList
           data={data}
           keyExtractor={item => `${item.id}`}
-          renderItem={({ item, index }) => <OrderItem data={item} visit={index} style={styles.item} />}
+          renderItem={({item, index}) => <OrderItem data={item} visit={index} style={styles.item}/>}
           onEndReached={this._handleLoadMore}
           onEndReachedThreshold={0.5}
           initialNumToRender={10}
@@ -130,16 +134,17 @@ class ListOrder extends React.Component {
       clickButton={() => navigation.navigate(homeTabs.shop)}
     />;
   };
+
   render() {
     const {
-      screenProps: { t },
+      screenProps: {t},
     } = this.props;
     return (
       <ThemedView isFullView>
         <Header
-          leftComponent={<IconHeader />}
-          centerComponent={<TextHeader title={t('common:text_orders')} />}
-          rightComponent={<CartIcon />}
+          leftComponent={<IconHeader/>}
+          centerComponent={<TextHeader title={t('common:text_orders')}/>}
+          rightComponent={<CartIcon/>}
         />
         {this.renderData()}
       </ThemedView>
@@ -155,6 +160,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     auth: authSelector(state),
+    language: languageSelector(state),
   };
 };
 export default connect(mapStateToProps)(ListOrder);

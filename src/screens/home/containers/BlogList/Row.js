@@ -5,7 +5,7 @@ import ItemBlogRow from 'src/screens/blog/containers/ItemBlogRow';
 
 import {padding} from 'src/components/config/spacing';
 
-const BlogRow = ({data, width, height, boxed}) => {
+const BlogRow = ({data, width, height, boxed, tz}) => {
   return (<View>
     <ScrollView
       horizontal
@@ -13,6 +13,7 @@ const BlogRow = ({data, width, height, boxed}) => {
     >
       {data.map((blog, index) => (
         <ItemBlogRow
+          tz={tz}
           key={index}
           item={blog}
           width={width}

@@ -45,12 +45,12 @@ class ScrollProductDetail extends Component {
     });
 
     const headerColor = scrollY.interpolate({
-      inputRange: [0, this.headerScrollDistance * 0.4, this.headerScrollDistance * 0.7 , this.headerScrollDistance],
-      outputRange: ['transparent', 'transparent', 'rgba(255,255,255,0.3)', theme.colors.bgColor],
+      inputRange: [0, this.headerScrollDistance],
+      outputRange: ['transparent', theme.colors.bgColor],
     });
 
     const titleColor = scrollY.interpolate({
-      inputRange: [0, 0],
+      inputRange: [0, this.headerScrollDistance],
       outputRange: ['transparent', theme.Text.primary.color],
     });
 
@@ -98,7 +98,7 @@ class ScrollProductDetail extends Component {
           <Header
             leftComponent={<IconHeader />}
             centerComponent={
-              <Animated.Text style={[styles.textHeading, { color: titleColor }]}>{headerTitle}</Animated.Text>
+              <Animated.Text numberOfLines={1} style={[styles.textHeading, { color: titleColor }]}>{headerTitle}</Animated.Text>
             }
             rightComponent={
               <CartIcon/>

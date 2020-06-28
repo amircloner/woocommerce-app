@@ -52,14 +52,16 @@ export const priceRangesSelector = createSelector(
   state => state.product.getIn(['filterBy', 'min']),
   state => state.product.getIn(['filterBy', 'max']),
   (data, min, max) => {
-    const minBy =
-      data && data.size && data.minBy(value => value.get('price')).get('price')
-        ? data.minBy(value => value.get('price')).get('price')
-        : '0';
-    const maxBy =
-      data && data.size && data.maxBy(value => value.get('price')).get('price')
-        ? data.maxBy(value => value.get('price')).get('price')
-        : '99';
+    const productMin =
+      data && data.size && data.minBy(value => value.get('price'))
+        ? data.minBy(value => parseFloat(value.get('price') || '0'))
+        : null;
+    const productMax =
+      data && data.size && data.maxBy(value => value.get('price'))
+        ? data.maxBy(value => parseFloat(value.get('price') || '0'))
+        : null;
+    const minBy = productMin ? productMin.get('price') : '0';
+    const maxBy = productMax ? productMax.get('price') : (parseFloat(minBy) + 99).toString();
     return {
       min: min ? min : minBy,
       max: max ? max : maxBy,

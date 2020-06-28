@@ -10,7 +10,7 @@ import { signOut } from 'src/modules/auth/actions';
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   handleLogout = () => {

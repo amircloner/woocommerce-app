@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import {compose} from 'recompose';
 import {fromJS, List, Map} from 'immutable';
 import {connect} from 'react-redux';
-import axios from 'axios';
 import merge from 'lodash/merge';
+import unescape from 'lodash/unescape';
 
 import {showMessage} from 'react-native-flash-message';
 import {StyleSheet, View, Dimensions, TouchableOpacity} from 'react-native';
@@ -59,7 +59,7 @@ const HEADER_MAX_HEIGHT = height * 0.6;
 
 class Product extends Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props, context) {
@@ -103,10 +103,13 @@ class Product extends Component {
 
     // Fetch variations
     if (product.get('type') === productType.VARIABLE) {
-      const CancelToken = axios.CancelToken;
-      this.source = CancelToken.source();
+
+      this.abortController = new AbortController();
+
       // Get variations
-      getVariations(product.get('id'), lang, this.source.token)
+      getVariations(product.get('id'), lang, {
+        signal: this.abortController.signal,
+      })
         .then(data => {
           this.setState({
             variations: fromJS(data),
@@ -114,13 +117,11 @@ class Product extends Component {
           });
         })
         .catch(error => {
-          if (!axios.isCancel(error)) {
-            handleError(error);
-            this.setState({
-              loadingVariation: false,
-            });
-            handleError(error);
-          }
+          handleError(error);
+          this.setState({
+            loadingVariation: false,
+          });
+          handleError(error);
         });
     }
 
@@ -131,8 +132,8 @@ class Product extends Component {
   }
 
   componentWillUnmount() {
-    if (this.source) {
-      this.source.cancel('User exist the screen.');
+    if (this.abortController) {
+      this.abortController.abort();
     }
   }
 
@@ -284,7 +285,7 @@ class Product extends Component {
 
     return (
       <ScrollProductDetail
-        headerTitle={product.get('name')}
+        headerTitle={unescape(product.get('name'))}
         imageElement={
           <ProductImages
             images={images}
@@ -309,23 +310,27 @@ class Product extends Component {
         <Container style={styles.container}>
           <View style={styles.viewCategoryRating}>
             <CategoryName product={product} style={styles.textCategory} />
-            <TouchableOpacity
-              style={styles.viewRating}
-              onPress={() =>
-                this.props.navigation.navigate(mainStack.product_review, {
-                  product_id: product.get('id'),
-                  image: image,
-                  name: product.get('name'),
-                })
-              }>
-              <Rating size={12} startingValue={rating} readonly />
-              <Text style={styles.textRating}>({product.get('rating_count')})</Text>
-            </TouchableOpacity>
+            {configs.get('toggleReviewProduct') ?
+              <TouchableOpacity
+                style={styles.viewRating}
+                onPress={() =>
+                  this.props.navigation.navigate(mainStack.product_review, {
+                    product_id: product.get('id'),
+                    image: image,
+                    name: product.get('name'),
+                  })
+                }>
+                <Rating size={12} startingValue={rating} readonly />
+                <Text style={styles.textRating}>({product.get('rating_count')})</Text>
+              </TouchableOpacity> : null}
           </View>
           <Text h2 medium style={styles.textName}>
-            {product.get('name')}
+            {unescape(product.get('name'))}
           </Text>
           {this.showPrice()}
+          {product.get('sku') ? <Text h6 medium style={styles.textName}>
+            sku: {product.get('sku')}
+          </Text> : null}
           {configs.get('toggleShortDescriptionProduct') && product.get('short_description') ? (
             <View style={{marginBottom: 16}}>
               <TextHtml
@@ -362,7 +367,7 @@ class Product extends Component {
             />
           ): null}
 
-          <ListItem
+          {configs.get('toggleReviewProduct') ? <ListItem
             title={t('catalog:text_reviews')}
             onPress={() =>
               this.props.navigation.navigate(mainStack.product_review, {
@@ -374,7 +379,7 @@ class Product extends Component {
             small
             chevron
             type="underline"
-          />
+          /> : null}
           {vendorDetail && vendorDetail.size > 0 ? (
             <VendorHeaderDetail
               store={vendorDetail.toJS()}

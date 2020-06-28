@@ -11,6 +11,7 @@ import {isLoadingReviewSelector} from 'src/modules/vendor/selectors';
 
 import {margin, padding} from 'src/components/config/spacing';
 import {mainStack} from 'src/config/navigator';
+import {getSiteConfig} from "../../../modules/common/selectors";
 
 const REVIEW_PER_PAGE = 10;
 
@@ -115,7 +116,7 @@ class ReviewsStore extends Component {
   };
 
   render() {
-    const {store, navigation, isLogin, screenProps: {t}} = this.props;
+    const {store, navigation, isLogin, screenProps: {t}, siteConfig} = this.props;
     const {loading, data, refreshing} = this.state;
     if (!store) {
       return null;
@@ -140,7 +141,7 @@ class ReviewsStore extends Component {
               showsHorizontalScrollIndicator={false}
               keyExtractor={item => `${item.id}`}
               data={data}
-              renderItem={({item, index}) => <ItemReview data={item} style={index === 0 && {borderTopWidth: 1}}/>}
+              renderItem={({item, index}) => <ItemReview tz={siteConfig.get('timezone_string')} data={item} style={index === 0 && {borderTopWidth: 1}}/>}
               onEndReached={this.handleLoadMore}
               onEndReachedThreshold={0.5}
               ListFooterComponent={this.renderFooter}
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     loadingReview: isLoadingReviewSelector(state),
+    siteConfig: getSiteConfig(state),
   };
 };
 

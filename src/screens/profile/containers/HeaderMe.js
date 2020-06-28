@@ -61,7 +61,7 @@ const HeaderMe = props => {
     <ListItem
       title={nameUser}
       leftAvatar={{
-        source: user.user_url ? { uri: user.user_url } : require('src/assets/images/pDefault.png'),
+        source: user.avatar ? { uri: user.avatar } : require('src/assets/images/pDefault.png'),
         size: 60,
         rounded: true,
         onPress: () => navigation.navigate(profileStack.account),
@@ -70,12 +70,12 @@ const HeaderMe = props => {
         medium: true,
         onPress: () => navigation.navigate(profileStack.account),
       }}
-      rightElement={
-        <TouchableOpacity style={styles.loginBell} onPress={() => false && navigation.navigate(profileStack.notification_list)}>
-          <Icon name="bell" size={20} />
-          {/*<Badge status="error" value={2} badgeStyle={styles.badge} textStyle={styles.textBadge} />*/}
-        </TouchableOpacity>
-      }
+      // rightElement={
+      //   <TouchableOpacity style={styles.loginBell} onPress={() => false && navigation.navigate(profileStack.notification_list)}>
+      //     <Icon name="bell" size={20} />
+      //     {/*<Badge status="error" value={2} badgeStyle={styles.badge} textStyle={styles.textBadge} />*/}
+      //   </TouchableOpacity>
+      // }
       containerStyle={styles.item}
     />
   );

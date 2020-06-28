@@ -10,7 +10,7 @@ import { lineHeights } from 'src/components/config/fonts';
 
 export default class ContactScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
   render() {
     const {

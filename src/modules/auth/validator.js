@@ -7,7 +7,6 @@ import passwordValidator from 'password-validator';
 
 import en from 'src/locales/en.json';
 import ar from 'src/locales/ar.json';
-import fa from 'src/locales/fa.json';
 
 let schema = new passwordValidator();
 
@@ -25,7 +24,6 @@ schema
 const languages = {
   en,
   ar,
-  fa,
 };
 
 export function validatorSignIn(data, language) {
@@ -148,6 +146,42 @@ export function validatorChangePassword(data, language) {
     data.password_confirm !== data.password_new
   ) {
     errors = errors.set('password_confirm', validators.text_password_confirm);
+  }
+
+  return errors;
+}
+
+export function validatorUpdateAccount(data, language) {
+  let errors = Map();
+  const t = languages[language] ? languages[language] : languages.en;
+  const validators = t.validators || {};
+
+  if (
+    !data ||
+    !data.first_name ||
+    !isLength(data.first_name, {min: 1, max: 32})
+  ) {
+    errors = errors.set('first_name', validators.text_first_name);
+  }
+
+  if (
+    !data ||
+    !data.last_name ||
+    !isLength(data.last_name, {min: 1, max: 32})
+  ) {
+    errors = errors.set('last_name', validators.text_last_name);
+  }
+
+  // if (
+  //   !data ||
+  //   !data.last_name ||
+  //   !isLength(data.last_name, {min: 1, max: 32})
+  // ) {
+  //   errors = errors.set('last_name', validators.text_last_name);
+  // }
+
+  if (!data || !data.email || !isEmail(data.email)) {
+    errors = errors.set('email', validators.text_email);
   }
 
   return errors;

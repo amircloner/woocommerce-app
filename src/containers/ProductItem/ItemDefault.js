@@ -7,11 +7,12 @@ import {List, Map, fromJS} from 'immutable';
 import {withNavigation} from 'react-navigation';
 import {useTranslation} from 'react-i18next';
 
+import unescape from 'lodash/unescape';
 import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {withTheme, Image, Badge, Text} from 'src/components';
 import WishListIcon from '../WishListIcon';
@@ -27,9 +28,30 @@ import {mainStack} from 'src/config/navigator';
 
 import {SIMPLE} from 'src/config/product';
 
-export function ItemDefault(props) {
-  const {item, width, height, navigation, dispatch, navigationType, theme, configs} = props;
-  const {name, images, price_format, on_sale, is_new, type, average_rating, rating_count, id, purchasable, stock_status} = item;
+const ItemDefault = React.memo(props => {
+  const {
+    item,
+    width,
+    height,
+    navigation,
+    dispatch,
+    navigationType,
+    theme,
+    configs,
+  } = props;
+  const {
+    name,
+    images,
+    price_format,
+    on_sale,
+    is_new,
+    type,
+    average_rating,
+    rating_count,
+    id,
+    purchasable,
+    stock_status,
+  } = item;
   const {t} = useTranslation();
 
   const productItemStyle = {
@@ -45,8 +67,9 @@ export function ItemDefault(props) {
   return (
     <TouchableOpacity
       style={productItemStyle}
-      onPress={() => navigation[navigationType](mainStack.product, {product: item})}
-    >
+      onPress={() =>
+        navigation[navigationType](mainStack.product, {product: item})
+      }>
       <View>
         <Image
           source={
@@ -55,15 +78,23 @@ export function ItemDefault(props) {
               : require('src/assets/images/pDefault.png')
           }
           style={productItemImageStyle}
-          PlaceholderContent={<ActivityIndicator/>}
+          PlaceholderContent={<ActivityIndicator />}
         />
         <View style={styles.labelWrap}>
           <View style={styles.viewHeaderLabel}>
             <View>
-              {is_new ? <Badge value={t('common:text_new')} status="success" containerStyle={styles.badge}/> : null}
-              {on_sale ? <Badge value={t('common:text_sale')} status="warning"/> : null}
+              {is_new ? (
+                <Badge
+                  value={t('common:text_new')}
+                  status="success"
+                  containerStyle={styles.badge}
+                />
+              ) : null}
+              {on_sale ? (
+                <Badge value={t('common:text_sale')} status="warning" />
+              ) : null}
             </View>
-            <WishListIcon product_id={id}/>
+            <WishListIcon product_id={id} />
           </View>
           {configs.get('toggleAddButtonProduct') &&
             configs.get('toggleCheckout') &&
@@ -82,9 +113,10 @@ export function ItemDefault(props) {
                       meta_data: List(),
                     }),
                   )
-                }
-              >
-                <Text h4 medium style={styles.textAdd}>+</Text>
+                }>
+                <Text h4 medium style={styles.textAdd}>
+                  +
+                </Text>
               </TouchableOpacity>
             )}
         </View>
@@ -115,19 +147,28 @@ export function ItemDefault(props) {
             },
           ]}
         >
-          {name}
+          {unescape(name)}
         </Text>
-        <Price price_format={price_format} type={type} style={styles.textPrice}/>
-        {configs.get('toggleRatingProduct') ? (
+        <Price
+          price_format={price_format}
+          type={type}
+          style={styles.textPrice}
+        />
+        {configs.get('toggleReviewProduct') &&
+        configs.get('toggleRatingProduct') ? (
           <View style={styles.viewFooter}>
-            <Rating size={12} startingValue={parseFloat(average_rating)} readonly />
+            <Rating
+              size={12}
+              startingValue={parseFloat(average_rating)}
+              readonly
+            />
             <Text style={styles.nameRating}>({rating_count})</Text>
           </View>
         ) : null}
       </View>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   viewInfo: {
@@ -164,7 +205,7 @@ const styles = StyleSheet.create({
   nameRating: {
     fontSize: 10,
     lineHeight: 15,
-    marginLeft: margin.small-2,
+    marginLeft: margin.small - 2,
   },
   buttonAdd: {
     backgroundColor: black,
@@ -194,5 +235,5 @@ const mapStateToProps = state => {
 export default compose(
   withTheme,
   withNavigation,
-  connect(mapStateToProps)
+  connect(mapStateToProps),
 )(ItemDefault);

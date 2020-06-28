@@ -10,7 +10,7 @@ import LastestBlog from './containers/LastestBlog';
 import ItemBlog from './containers/ItemBlog';
 
 import {getBlogs} from 'src/modules/blog/service';
-import { languageSelector } from 'src/modules/common/selectors';
+import {getSiteConfig, languageSelector} from 'src/modules/common/selectors';
 
 import {padding, margin} from 'src/components/config/spacing';
 import {prepareBlogItem} from 'src/utils/blog'
@@ -102,6 +102,7 @@ class BlogList extends React.Component {
   };
 
   render() {
+    const { siteConfig } = this.props;
     const { data } = this.state;
     const dataSwiper = data.filter((item, index) => index < 3);
     const dataFlatlist = data.filter((item, index) => index >= 3);
@@ -119,6 +120,7 @@ class BlogList extends React.Component {
             keyExtractor={item => `${item.id}`}
             renderItem={({ item, index }) => (
               <ItemBlog
+                tz={siteConfig.get('timezone_string')}
                 item={item}
                 style={[
                   styles.item,
@@ -163,6 +165,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     language: languageSelector(state),
+    siteConfig: getSiteConfig(state),
   };
 };
 

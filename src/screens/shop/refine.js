@@ -17,7 +17,7 @@ import {margin} from 'src/components/config/spacing';
 
 class RefineScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props, context) {
@@ -137,7 +137,7 @@ class RefineScreen extends React.Component {
       screenProps: {t},
     } = this.props;
     const {sortBy} = this.state;
-    const parent = navigation.getParam('parent', '');
+    const category = navigation.getParam('category', {});
 
     return (
       <ViewRefine handleResult={this.showResult} clearAll={this.clearAll}>
@@ -152,13 +152,14 @@ class RefineScreen extends React.Component {
             {t('catalog:text_filter')}
           </Text>
 
-          <ListItem
-            title={t('catalog:text_category')}
-            type="underline"
-            small
-            chevron
-            onPress={() => navigation.navigate(mainStack.filter_category, {parent})}
-          />
+          {category ? (
+            <ListItem
+              title={t('catalog:text_category')}
+              type="underline"
+              small
+              chevron
+              onPress={() => navigation.navigate(mainStack.filter_category, {category})}
+            />) : null}
 
           <ListItem
             title={t('catalog:text_price_range')}

@@ -1,5 +1,5 @@
 import { lifecycle, withState, compose } from 'recompose';
-import { getSingleProduct, getSingleBlog } from 'src/modules/product/service';
+import { getSingleProduct, getSingleBlog, getSinglePage } from 'src/modules/product/service';
 
 export const getSingleData = lifecycle({
   componentDidMount() {
@@ -8,7 +8,7 @@ export const getSingleData = lifecycle({
     const type = navigation.getParam('type', "product");
     const { updateData, updateLoading } = this.props;
     if (id) {
-      const fetchData = type === 'blog' ? getSingleBlog : getSingleProduct;
+      const fetchData = type === 'blog' ? getSingleBlog : type === 'page' ? getSinglePage : getSingleProduct;
       fetchData(id, lang).then(data => {
         updateData(data);
       }).catch(error => {

@@ -19,7 +19,7 @@ import { ENABLE_CONFIG_DEMO } from 'src/config/development';
 
 class SettingScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
   render() {
     const {
